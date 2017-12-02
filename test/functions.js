@@ -16,10 +16,10 @@ addAccount(eth.accounts[4], "Account #4");
 addAccount(eth.accounts[5], "Account #5");
 addAccount(eth.accounts[6], "Account #6");
 addAccount(eth.accounts[7], "Account #7");
-addAccount(eth.accounts[8], "Account #8");
-addAccount(eth.accounts[9], "Account #9");
-addAccount(eth.accounts[10], "Account #10");
-addAccount(eth.accounts[11], "Account #11");
+addAccount(eth.accounts[8], "Account #8 - Advisors");
+addAccount(eth.accounts[9], "Account #9 - Team");
+addAccount(eth.accounts[10], "Account #10 - Contractors");
+addAccount(eth.accounts[11], "Account #11 - User Growth Pool");
 
 
 var minerAccount = eth.accounts[0];
@@ -30,10 +30,10 @@ var account4 = eth.accounts[4];
 var account5 = eth.accounts[5];
 var account6 = eth.accounts[6];
 var account7 = eth.accounts[7];
-var account8 = eth.accounts[8];
-var account9 = eth.accounts[9];
-var owner1 = eth.accounts[10];
-var owner2 = eth.accounts[11];
+var advisors = eth.accounts[8];
+var team = eth.accounts[9];
+var contractors = eth.accounts[10];
+var userGrowthPool = eth.accounts[11];
 
 var baseBlock = eth.blockNumber;
 

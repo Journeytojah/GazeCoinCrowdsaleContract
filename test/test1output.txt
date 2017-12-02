@@ -10,27 +10,27 @@ DEPLOYMENTDATA     = 'deploymentData.txt'
 INCLUDEJS          = './include.js'
 TEST1OUTPUT        = 'test1output.txt'
 TEST1RESULTS       = 'test1results.txt'
-CURRENTTIME        = '1512230896' 'Sat  2 Dec 2017 16:08:16 UTC'
-START_DATE         = '1512230941' 'Sat  2 Dec 2017 16:09:01 UTC'
-END_DATE           = '1512230941' 'Sat  2 Dec 2017 16:09:01 UTC'
+CURRENTTIME        = '1512279357' 'Sun  3 Dec 2017 05:35:57 UTC'
+START_DATE         = '1512279402' 'Sun  3 Dec 2017 05:36:42 UTC'
+END_DATE           = '1512279597' 'Sun  3 Dec 2017 05:39:57 UTC'
 --- Differences ../contracts/BTTSTokenFactory.sol BTTSTokenFactory.sol ---
 
 --- Differences ../contracts/GazeCoinCrowdsale.sol GazeCoinCrowdsale.sol ---
 165c165
 <     uint public START_DATE = 1512921600;
 ---
->     uint public START_DATE = 1512230941; // Sat  2 Dec 2017 16:09:01 UTC
+>     uint public START_DATE = 1512279402; // Sun  3 Dec 2017 05:36:42 UTC
 170c170
 <     uint public END_DATE = 1513872000;
 ---
->     uint public END_DATE = 1512230941; // Sat  2 Dec 2017 16:09:01 UTC
+>     uint public END_DATE = 1512279597; // Sun  3 Dec 2017 05:36:42 UTC
 solc, the solidity compiler commandline interface
 Version: 0.4.18+commit.9cf6e910.Darwin.appleclang
 Welcome to the Geth JavaScript console!
 
 instance: Geth/v1.7.3-stable-4bb3c89d/darwin-amd64/go1.9.2
 coinbase: 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e
-at block: 4072 (Sun, 03 Dec 2017 03:07:43 AEDT)
+at block: 6180 (Sun, 03 Dec 2017 16:35:29 AEDT)
  datadir: /Users/bok/Projects/GazeCoinCrowdsaleContract/test/testchain
  modules: admin:1.0 debug:1.0 eth:1.0 miner:1.0 net:1.0 personal:1.0 rpc:1.0 txpool:1.0 web3:1.0
 
@@ -56,14 +56,6 @@ undefined
 > 
 undefined
 > 
-undefined
-> 
-undefined
-> 
-> 
-undefined
-> 
-undefined
 > 
 undefined
 > 
@@ -84,7 +76,7 @@ undefined
 > 
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e        9.000000000000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e        6.000000000000000000           0.000000000000000000 Account #0 - Miner
 RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433        0.000000000000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
@@ -92,84 +84,14 @@ RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.00000000000000000
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT: 
-undefined
-> 
-RESULT: 
-undefined
-> 
-> 
-> 
-undefined
-> 
-undefined
-> 
-undefined
-> 
-RESULT: Deploy BTTS SafeMath Library
-undefined
-> 
-undefined
-> 
-undefined
-> 
-undefined
-> 
-undefined
-> 
-... 
-...... 
-......... 
-............ 
-............ 
-............ 
-............ 
-............ 
-............ 
-......... 
-...... 
-... 
-undefined
-> 
-... 
-undefined
-> 
-DATA: tokenFactoryLibSMAddress=0x658ce9fb3cf49687a5309121b2794f349b79b9a6
-RESULT:  # Account                                             EtherBalanceChange                          Token Name
-RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       15.000140428000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.000140428000000000           0.000000000000000000 Account #1 - Contract Owner
-RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
-RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
-RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
-RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
-RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
-RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:                                                                                     0.000000000000000000 Total Token Balances
-RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT: 
-undefined
-> 
-RESULT: PASS Deploy BTTS SafeMath Library
-1
-> 
-RESULT: tokenFactoryLibSMTx status=0x1 Success gas=6000000 gasUsed=140428 costETH=0.000140428 costUSD=0.06597588296 @ ETH/USD=469.82 gasPrice=1 gwei block=4077 txIx=0 txId=0xd063b9e17f7e467a67b2448e7b20f81ae97e5fe6269f1378ed28cd869f0e9693 @ 1512230917 Sat, 02 Dec 2017 16:08:37 UTC
-undefined
-> 
-RESULT: tokenContractAddress=null
 undefined
 > 
 RESULT: 
@@ -194,12 +116,6 @@ undefined
 > 
 undefined
 > 
-undefined
-> 
-undefined
-> 
-undefined
-> 
 ... 
 ...... 
 ......... 
@@ -217,23 +133,22 @@ undefined
 ... 
 undefined
 > 
-DATA: tokenFactoryLibBTTSAddress=0xed7852146e2254fc862b87f77fa3ba3b211079fe
+DATA: tokenFactoryLibBTTSAddress=0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       21.004024437000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.004024437000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       15.003250113000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.003250113000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -243,7 +158,7 @@ undefined
 RESULT: PASS Deploy BTTS Library
 1
 > 
-RESULT: tokenFactoryLibBTTSTx status=0x1 Success gas=6000000 gasUsed=3884009 costETH=0.003884009 costUSD=1.82478510838 @ ETH/USD=469.82 gasPrice=1 gwei block=4079 txIx=0 txId=0x1d9d53a274baa3312bb75c3050bde0461be6a1b6c0fb9aa0706251683afac6dc @ 1512230925 Sat, 02 Dec 2017 16:08:45 UTC
+RESULT: tokenFactoryLibBTTSTx status=0x1 Success gas=6000000 gasUsed=3250113 costETH=0.003250113 costUSD=1.52696808966 @ ETH/USD=469.82 gasPrice=1 gwei block=6185 txIx=0 txId=0x4b2256113c52992e4b2b8c5108de3b85e3d945df7246bf88638c0fcae5164f18 @ 1512279377 Sun, 03 Dec 2017 05:36:17 UTC
 undefined
 > 
 RESULT: tokenContractAddress=null
@@ -279,8 +194,6 @@ undefined
 > 
 undefined
 > 
-undefined
-> 
 ... 
 ...... 
 ......... 
@@ -299,24 +212,23 @@ undefined
 ... 
 undefined
 > 
-DATA: tokenFactoryAddress=0xbfffb78bbb3a27d78857021d162b64c577626b62
+DATA: tokenFactoryAddress=0x10c7713fac5a0a4465a10b7300215447fa50b2d5
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       27.007067050000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.007067050000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       21.006252350000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.006252350000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -326,10 +238,10 @@ undefined
 RESULT: PASS Deploy BTTSTokenFactory
 1
 > 
-RESULT: tokenFactoryTx status=0x1 Success gas=6000000 gasUsed=3042613 costETH=0.003042613 costUSD=1.42948043966 @ ETH/USD=469.82 gasPrice=1 gwei block=4081 txIx=0 txId=0xf3efbd3dfb691205f28ceb1717f5af8b0be95d5b0f4d070f64b7719de335686b @ 1512230936 Sat, 02 Dec 2017 16:08:56 UTC
+RESULT: tokenFactoryTx status=0x1 Success gas=6000000 gasUsed=3002237 costETH=0.003002237 costUSD=1.41051098734 @ ETH/USD=469.82 gasPrice=1 gwei block=6187 txIx=0 txId=0x9de2a039c289978db948dd025557e90167123554841bfadda106b5e9daab9b94 @ 1512279395 Sun, 03 Dec 2017 05:36:35 UTC
 undefined
 > 
-RESULT: tokenFactoryContractAddress=0xbfffb78bbb3a27d78857021d162b64c577626b62
+RESULT: tokenFactoryContractAddress=0x10c7713fac5a0a4465a10b7300215447fa50b2d5
 RESULT: tokenFactory.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: tokenFactory.newOwner=0x0000000000000000000000000000000000000000
 undefined
@@ -369,11 +281,11 @@ undefined
 ... 
 undefined
 > 
-RESULT: tokenFactoryContractAddress=0xbfffb78bbb3a27d78857021d162b64c577626b62
-RESULT: get BTTSTokenListing 0 #4083 {"bttsTokenAddress":"0x68be0709e082674fc39e8047dd3967e8b96fc1b4","decimals":"18","initialSupply":"0","mintable":true,"name":"GazeCoin","ownerAddress":"0xa11aae29840fbb5c86e6fd4cf809eba183aef433","symbol":"GZE","transferable":false}
+RESULT: tokenFactoryContractAddress=0x10c7713fac5a0a4465a10b7300215447fa50b2d5
+RESULT: get BTTSTokenListing 0 #6189 {"bttsTokenAddress":"0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e","decimals":"18","initialSupply":"0","mintable":true,"name":"GazeCoin","ownerAddress":"0xa11aae29840fbb5c86e6fd4cf809eba183aef433","symbol":"GZE","transferable":false}
 undefined
 > 
-RESULT: bttsTokens=#1 ["0x68be0709e082674fc39e8047dd3967e8b96fc1b4"]
+RESULT: bttsTokens=#1 ["0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e"]
 undefined
 > 
 undefined
@@ -390,38 +302,37 @@ undefined
 > 
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       33.008941243000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.008941243000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       27.008096273000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.008096273000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
-RESULT: 15 0x68be0709e082674fc39e8047dd3967e8b96fc1b4        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT: 
 undefined
 > 
-RESULT: deployTokenTx status=0x1 Success gas=4000000 gasUsed=1874193 costETH=0.001874193 costUSD=0.88053335526 @ ETH/USD=469.82 gasPrice=1 gwei block=4083 txIx=0 txId=0xb6501101369c4b871668c4bd7589fc2a3e2464c19b22a76b4abfd837cce1b968 @ 1512230958 Sat, 02 Dec 2017 16:09:18 UTC
+RESULT: deployTokenTx status=0x1 Success gas=4000000 gasUsed=1843923 costETH=0.001843923 costUSD=0.86631190386 @ ETH/USD=469.82 gasPrice=1 gwei block=6189 txIx=0 txId=0x919fab83cef59548e3479747f1509074208f04e0e0b8ee6b731e5243f77ae48a @ 1512279422 Sun, 03 Dec 2017 05:37:02 UTC
 undefined
 > 
-RESULT: tokenFactoryContractAddress=0xbfffb78bbb3a27d78857021d162b64c577626b62
+RESULT: tokenFactoryContractAddress=0x10c7713fac5a0a4465a10b7300215447fa50b2d5
 RESULT: tokenFactory.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: tokenFactory.newOwner=0x0000000000000000000000000000000000000000
-RESULT: BTTSTokenListing 0 #4083 {"bttsTokenAddress":"0x68be0709e082674fc39e8047dd3967e8b96fc1b4","decimals":"18","initialSupply":"0","mintable":true,"name":"GazeCoin","ownerAddress":"0xa11aae29840fbb5c86e6fd4cf809eba183aef433","symbol":"GZE","transferable":false}
+RESULT: BTTSTokenListing 0 #6189 {"bttsTokenAddress":"0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e","decimals":"18","initialSupply":"0","mintable":true,"name":"GazeCoin","ownerAddress":"0xa11aae29840fbb5c86e6fd4cf809eba183aef433","symbol":"GZE","transferable":false}
 undefined
 > 
-RESULT: tokenContractAddress=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: tokenContractAddress=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: token.newOwner=0x0000000000000000000000000000000000000000
 RESULT: token.symbol=GZE
@@ -474,26 +385,25 @@ undefined
 ... 
 undefined
 > 
-DATA: crowdsaleAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
+DATA: crowdsaleAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       39.009771452000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009771452000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       33.009479490000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009479490000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
-RESULT: 15 0x68be0709e082674fc39e8047dd3967e8b96fc1b4        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
-RESULT: 16 0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT: 15 0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -503,15 +413,15 @@ undefined
 RESULT: PASS Deploy GazeCoin Crowdsale Contract
 1
 > 
-RESULT: crowdsaleAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6 status=0x1 Success gas=6000000 gasUsed=830209 costETH=0.000830209 costUSD=0.39004879238 @ ETH/USD=469.82 gasPrice=1 gwei block=4085 txIx=0 txId=0x264950056d7d73748ff98bccd522c82b1a73076b7a78113b25b53ddc7a68c78e @ 1512230963 Sat, 02 Dec 2017 16:09:23 UTC
+RESULT: crowdsaleAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd status=0x1 Success gas=6000000 gasUsed=1383217 costETH=0.001383217 costUSD=0.64986301094 @ ETH/USD=469.82 gasPrice=1 gwei block=6191 txIx=0 txId=0xdb43134ed82f264932d66a459b7fae747d30ab9a9ff2800bfbc248dbf1bb1448 @ 1512279434 Sun, 03 Dec 2017 05:37:14 UTC
 undefined
 > 
-RESULT: crowdsaleContractAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
+RESULT: crowdsaleContractAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
 RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: crowdsale.newOwner=0x0000000000000000000000000000000000000000
 RESULT: crowdsale.wallet=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976
-RESULT: crowdsale.START_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
-RESULT: crowdsale.END_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
+RESULT: crowdsale.START_DATE=1512279402 Sun, 03 Dec 2017 05:36:42 UTC
+RESULT: crowdsale.END_DATE=1512279597 Sun, 03 Dec 2017 05:39:57 UTC
 RESULT: crowdsale.ethMinContribution=10000000000000000 0.01 ETH
 RESULT: crowdsale.usdCap=35000000
 RESULT: crowdsale.usdPerKEther=444050
@@ -550,23 +460,22 @@ undefined
 > 
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       45.009862816000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009862816000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       39.009571052000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009571052000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976        0.000000000000000000           0.000000000000000000 Account #2 - Wallet
 RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0        0.000000000000000000           0.000000000000000000 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
 RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9        0.000000000000000000           0.000000000000000000 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
-RESULT: 15 0x68be0709e082674fc39e8047dd3967e8b96fc1b4        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
-RESULT: 16 0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT: 15 0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                                     0.000000000000000000 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -579,35 +488,35 @@ RESULT: PASS Set Crowdsale Token To GZE - crowdsale.setBTTSToken(tokenAddress)
 RESULT: PASS Set Crowdsale Token To GZE - token.setMinter(crowdsaleAddress)
 1
 > 
-RESULT: setCrowdsaleToken_1Tx status=0x1 Success gas=100000 gasUsed=45179 costETH=0.000045179 costUSD=0.02122599778 @ ETH/USD=469.82 gasPrice=1 gwei block=4087 txIx=0 txId=0xa602fe7b3e6851211ef29fb83358df91a497520d5e7bcd0a84a11dd54f183246 @ 1512231018 Sat, 02 Dec 2017 16:10:18 UTC
+RESULT: setCrowdsaleToken_1Tx status=0x1 Success gas=100000 gasUsed=45377 costETH=0.000045377 costUSD=0.02131902214 @ ETH/USD=469.82 gasPrice=1 gwei block=6193 txIx=0 txId=0x144d69b3ad691ec66b984a4b9a7c36957c4c08124e6933841c2915b3c8671b2d @ 1512279500 Sun, 03 Dec 2017 05:38:20 UTC
 undefined
 > 
-RESULT: setCrowdsaleToken_2Tx status=0x1 Success gas=100000 gasUsed=46185 costETH=0.000046185 costUSD=0.0216986367 @ ETH/USD=469.82 gasPrice=1 gwei block=4087 txIx=1 txId=0x5932e03815d6d744fa8173badcc0a4bf6f843a46ecda366fbd945ae56ce89058 @ 1512231018 Sat, 02 Dec 2017 16:10:18 UTC
+RESULT: setCrowdsaleToken_2Tx status=0x1 Success gas=100000 gasUsed=46185 costETH=0.000046185 costUSD=0.0216986367 @ ETH/USD=469.82 gasPrice=1 gwei block=6193 txIx=1 txId=0x525bcafba2010c688b4d2df7e3375b757bd22c5f7e2ca83b1ac8e6543824e5b8 @ 1512279500 Sun, 03 Dec 2017 05:38:20 UTC
 undefined
 > 
-RESULT: crowdsaleContractAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
+RESULT: crowdsaleContractAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
 RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: crowdsale.newOwner=0x0000000000000000000000000000000000000000
 RESULT: crowdsale.wallet=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976
-RESULT: crowdsale.START_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
-RESULT: crowdsale.END_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
+RESULT: crowdsale.START_DATE=1512279402 Sun, 03 Dec 2017 05:36:42 UTC
+RESULT: crowdsale.END_DATE=1512279597 Sun, 03 Dec 2017 05:39:57 UTC
 RESULT: crowdsale.ethMinContribution=10000000000000000 0.01 ETH
 RESULT: crowdsale.usdCap=35000000
 RESULT: crowdsale.usdPerKEther=444050
 RESULT: crowdsale.contributedEth=0 0 ETH
 RESULT: crowdsale.contributedUsd=0
 RESULT: crowdsale.generatedGze=0 0 GZE
-RESULT: crowdsale.bttsToken=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: crowdsale.bttsToken=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: crowdsale.usdCentPerGze=35
 RESULT: crowdsale.whitelistBonusPercent=20
 RESULT: crowdsale.ethCap=7.8819952708028375182974e+22 78819.952708028375182974 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 0%)=1.268714285714285714285e+21 1268.714285714285714285 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 20%)=1.522457142857142857142e+21 1522.457142857142857142 GZE
 RESULT: crowdsale.gzePerEth()=1.268714285714285714285e+21 1268.714285714285714285 GZE
-RESULT: BTTSTokenUpdated 0 #4087 {"newBTTSToken":"0x68be0709e082674fc39e8047dd3967e8b96fc1b4","oldBTTSToken":"0x0000000000000000000000000000000000000000"}
+RESULT: BTTSTokenUpdated 0 #6193 {"newBTTSToken":"0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e","oldBTTSToken":"0x0000000000000000000000000000000000000000"}
 undefined
 > 
-RESULT: tokenContractAddress=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: tokenContractAddress=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: token.newOwner=0x0000000000000000000000000000000000000000
 RESULT: token.symbol=GZE
@@ -617,10 +526,17 @@ RESULT: token.decimalsFactor=1000000000000000000
 RESULT: token.totalSupply=0
 RESULT: token.transferable=false
 RESULT: token.mintable=true
-RESULT: token.minter=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
-RESULT: MinterUpdated 0 #4087 {"from":"0x0000000000000000000000000000000000000000","to":"0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6"}
+RESULT: token.minter=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
+RESULT: MinterUpdated 0 #6193 {"from":"0x0000000000000000000000000000000000000000","to":"0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd"}
 undefined
 > 
+RESULT: 
+undefined
+> 
+> 
+> 
+RESULT: Waiting until 'START_DATE' at 1512279402+0s =Sun, 03 Dec 2017 16:36:43 AEDT now=Sun, 03 Dec 2017 16:38:28 AEDT
+RESULT: Waited until 'START_DATE' at at 1512279402+0s =Sun, 03 Dec 2017 16:36:43 AEDT now=Sun, 03 Dec 2017 16:38:28 AEDT
 RESULT: 
 undefined
 > 
@@ -644,23 +560,22 @@ undefined
 > 
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       51.010076516000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009862816000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       45.009783858000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009571052000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976     7000.000000000000000000           0.000000000000000000 Account #2 - Wallet
-RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0    -4000.000136850000000000     5074857.142857142857142857 Account #3
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0    -4000.000076403000000000     5074857.142857142857142857 Account #3
 RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844        0.000000000000000000           0.000000000000000000 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
-RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9    -3000.000076850000000000     3806142.857142857142857142 Account #6
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9    -3000.000136403000000000     3806142.857142857142857142 Account #6
 RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec        0.000000000000000000           0.000000000000000000 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
-RESULT: 15 0x68be0709e082674fc39e8047dd3967e8b96fc1b4        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
-RESULT: 16 0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT: 15 0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                               8880999.999999999999999999 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -673,36 +588,36 @@ RESULT: PASS Send Contribution #1 - ac3 4,000 ETH
 RESULT: PASS Send Contribution #1 - ac4 3,000 ETH
 1
 > 
-RESULT: sendContribution1_1Tx status=0x1 Success gas=400000 gasUsed=136850 costETH=0.00013685 costUSD=0.064294867 @ ETH/USD=469.82 gasPrice=1 gwei block=4089 txIx=0 txId=0xdb0efabee83b5854465dd022d78eae514d80d0b0ea931e923ffc627c19f09d7d @ 1512231042 Sat, 02 Dec 2017 16:10:42 UTC
+RESULT: sendContribution1_1Tx status=0x1 Success gas=400000 gasUsed=76403 costETH=0.000076403 costUSD=0.03589565746 @ ETH/USD=469.82 gasPrice=1 gwei block=6195 txIx=1 txId=0x73590c1a623620fd7111e7f0d807d8f17fe14bd1250809e94b711d37eacffa4e @ 1512279510 Sun, 03 Dec 2017 05:38:30 UTC
 undefined
 > 
-RESULT: sendContribution1_2Tx status=0x1 Success gas=400000 gasUsed=76850 costETH=0.00007685 costUSD=0.036105667 @ ETH/USD=469.82 gasPrice=1 gwei block=4089 txIx=1 txId=0x7af4976d0da496188aeea35aff0a730ddb278f14d38903818947432b3c8c694e @ 1512231042 Sat, 02 Dec 2017 16:10:42 UTC
+RESULT: sendContribution1_2Tx status=0x1 Success gas=400000 gasUsed=136403 costETH=0.000136403 costUSD=0.06408485746 @ ETH/USD=469.82 gasPrice=1 gwei block=6195 txIx=0 txId=0x1b02711c27ee26919289fc517815facd9b9bd56c4ce00fb7e55adec383c6b96e @ 1512279510 Sun, 03 Dec 2017 05:38:30 UTC
 undefined
 > 
-RESULT: crowdsaleContractAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
+RESULT: crowdsaleContractAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
 RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: crowdsale.newOwner=0x0000000000000000000000000000000000000000
 RESULT: crowdsale.wallet=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976
-RESULT: crowdsale.START_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
-RESULT: crowdsale.END_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
+RESULT: crowdsale.START_DATE=1512279402 Sun, 03 Dec 2017 05:36:42 UTC
+RESULT: crowdsale.END_DATE=1512279597 Sun, 03 Dec 2017 05:39:57 UTC
 RESULT: crowdsale.ethMinContribution=10000000000000000 0.01 ETH
 RESULT: crowdsale.usdCap=35000000
 RESULT: crowdsale.usdPerKEther=444050
 RESULT: crowdsale.contributedEth=7e+21 7000 ETH
 RESULT: crowdsale.contributedUsd=3108350
 RESULT: crowdsale.generatedGze=8.880999999999999999999999e+24 8880999.999999999999999999 GZE
-RESULT: crowdsale.bttsToken=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: crowdsale.bttsToken=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: crowdsale.usdCentPerGze=35
 RESULT: crowdsale.whitelistBonusPercent=20
 RESULT: crowdsale.ethCap=7.8819952708028375182974e+22 78819.952708028375182974 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 0%)=1.268714285714285714285e+21 1268.714285714285714285 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 20%)=1.522457142857142857142e+21 1522.457142857142857142 GZE
 RESULT: crowdsale.gzePerEth()=1.268714285714285714285e+21 1268.714285714285714285 GZE
-RESULT: Contributed 0 #4089 {"addr":"0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0","contributedEth":"4e+21","contributedUsd":"1776200","ethAmount":"4e+21","ethRefund":"0","generatedGze":"5.074857142857142857142857e+24","gzeAmount":"5.074857142857142857142857e+24","usdAmount":"1776200"}
-RESULT: Contributed 1 #4089 {"addr":"0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9","contributedEth":"7e+21","contributedUsd":"3108350","ethAmount":"3e+21","ethRefund":"0","generatedGze":"8.880999999999999999999999e+24","gzeAmount":"3.806142857142857142857142e+24","usdAmount":"1332150"}
+RESULT: Contributed 0 #6195 {"addr":"0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9","contributedEth":"3e+21","contributedUsd":"1332150","ethAmount":"3e+21","ethRefund":"0","generatedGze":"3.806142857142857142857142e+24","gzeAmount":"3.806142857142857142857142e+24","usdAmount":"1332150"}
+RESULT: Contributed 1 #6195 {"addr":"0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0","contributedEth":"7e+21","contributedUsd":"3108350","ethAmount":"4e+21","ethRefund":"0","generatedGze":"8.880999999999999999999999e+24","gzeAmount":"5.074857142857142857142857e+24","usdAmount":"1776200"}
 undefined
 > 
-RESULT: tokenContractAddress=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: tokenContractAddress=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: token.newOwner=0x0000000000000000000000000000000000000000
 RESULT: token.symbol=GZE
@@ -712,9 +627,9 @@ RESULT: token.decimalsFactor=1000000000000000000
 RESULT: token.totalSupply=8880999.999999999999999999
 RESULT: token.transferable=false
 RESULT: token.mintable=true
-RESULT: token.minter=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
-RESULT: Transfer 0 #4089: from=0x0000000000000000000000000000000000000000 to=0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0 tokens=5074857.142857142857142857
-RESULT: Transfer 1 #4089: from=0x0000000000000000000000000000000000000000 to=0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9 tokens=3806142.857142857142857142
+RESULT: token.minter=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
+RESULT: Transfer 0 #6195: from=0x0000000000000000000000000000000000000000 to=0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9 tokens=3806142.857142857142857142
+RESULT: Transfer 1 #6195: from=0x0000000000000000000000000000000000000000 to=0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0 tokens=5074857.142857142857142857
 undefined
 > 
 RESULT: 
@@ -743,23 +658,22 @@ undefined
 > 
 RESULT:  # Account                                             EtherBalanceChange                          Token Name
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
-RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       66.010222133000000000           0.000000000000000000 Account #0 - Miner
-RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009862816000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       57.009943920000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009571052000000000           0.000000000000000000 Account #1 - Contract Owner
 RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976    78819.952708028375182974           0.000000000000000000 Account #2 - Wallet
-RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0    -4000.000136850000000000     5074857.142857142857142857 Account #3
-RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844   -50000.000076850000000000    63435714.285714285714285714 Account #4
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0    -4000.000076403000000000     5074857.142857142857142857 Account #3
+RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844   -50000.000076403000000000    63435714.285714285714285714 Account #4
 RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
-RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9    -3000.000076850000000000     3806142.857142857142857142 Account #6
-RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec   -21819.952776795375182974    27683285.714285714285713156 Account #7
-RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8
-RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9
-RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10
-RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11
-RESULT: 12 0x658ce9fb3cf49687a5309121b2794f349b79b9a6        0.000000000000000000           0.000000000000000000 BTTS SafeMath Library
-RESULT: 13 0xed7852146e2254fc862b87f77fa3ba3b211079fe        0.000000000000000000           0.000000000000000000 BTTS Library
-RESULT: 14 0xbfffb78bbb3a27d78857021d162b64c577626b62        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
-RESULT: 15 0x68be0709e082674fc39e8047dd3967e8b96fc1b4        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
-RESULT: 16 0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9    -3000.000136403000000000     3806142.857142857142857142 Account #6
+RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec   -21819.952791687375182974    27683285.714285714285713156 Account #7
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000           0.000000000000000000 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000           0.000000000000000000 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000           0.000000000000000000 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000           0.000000000000000000 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT: 15 0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
 RESULT:                                                                              99999999.999999999999998869 Total Token Balances
 RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
@@ -772,36 +686,36 @@ RESULT: PASS Send Contribution #2 - ac4 50,000 ETH
 RESULT: PASS Send Contribution #2 - ac7 30,000 ETH
 1
 > 
-RESULT: sendContribution2_1Tx status=0x1 Success gas=400000 gasUsed=76850 costETH=0.00007685 costUSD=0.036105667 @ ETH/USD=469.82 gasPrice=1 gwei block=4092 txIx=0 txId=0x85922b38edc6638f6051d7615f0c92457506b76aa10e76e105e7fd7ff79b843c @ 1512231093 Sat, 02 Dec 2017 16:11:33 UTC
+RESULT: sendContribution2_1Tx status=0x1 Success gas=400000 gasUsed=76403 costETH=0.000076403 costUSD=0.03589565746 @ ETH/USD=469.82 gasPrice=1 gwei block=6197 txIx=0 txId=0xe62a82fb3ca5ae842b5f0366787963747884710283f590a621895b37d1124aca @ 1512279548 Sun, 03 Dec 2017 05:39:08 UTC
 undefined
 > 
-RESULT: sendContribution2_2Tx status=0x1 Success gas=400000 gasUsed=68767 costETH=0.000068767 costUSD=0.03230811194 @ ETH/USD=469.82 gasPrice=1 gwei block=4094 txIx=0 txId=0xdfafc79fad868c480c4074bab0575a685c31a7f544942258d858e4651ca6e73b @ 1512231115 Sat, 02 Dec 2017 16:11:55 UTC
+RESULT: sendContribution2_2Tx status=0x1 Success gas=400000 gasUsed=83659 costETH=0.000083659 costUSD=0.03930467138 @ ETH/USD=469.82 gasPrice=1 gwei block=6199 txIx=0 txId=0xfea314df6396d0e008e66f103f2f568d5d76e54c3ab65b243fa0308fcc1cdc7c @ 1512279570 Sun, 03 Dec 2017 05:39:30 UTC
 undefined
 > 
-RESULT: crowdsaleContractAddress=0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6
+RESULT: crowdsaleContractAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
 RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: crowdsale.newOwner=0x0000000000000000000000000000000000000000
 RESULT: crowdsale.wallet=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976
-RESULT: crowdsale.START_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
-RESULT: crowdsale.END_DATE=1512230941 Sat, 02 Dec 2017 16:09:01 UTC
+RESULT: crowdsale.START_DATE=1512279402 Sun, 03 Dec 2017 05:36:42 UTC
+RESULT: crowdsale.END_DATE=1512279597 Sun, 03 Dec 2017 05:39:57 UTC
 RESULT: crowdsale.ethMinContribution=10000000000000000 0.01 ETH
 RESULT: crowdsale.usdCap=35000000
 RESULT: crowdsale.usdPerKEther=444050
 RESULT: crowdsale.contributedEth=7.8819952708028375182974e+22 78819.952708028375182974 ETH
 RESULT: crowdsale.contributedUsd=34999999
 RESULT: crowdsale.generatedGze=9.9999999999999999999998869e+25 99999999.999999999999998869 GZE
-RESULT: crowdsale.bttsToken=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: crowdsale.bttsToken=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: crowdsale.usdCentPerGze=35
 RESULT: crowdsale.whitelistBonusPercent=20
 RESULT: crowdsale.ethCap=7.8819952708028375182974e+22 78819.952708028375182974 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 0%)=1.268714285714285714285e+21 1268.714285714285714285 GZE
 RESULT: crowdsale.gzeFromEth(1 ether, 20%)=1.522457142857142857142e+21 1522.457142857142857142 GZE
 RESULT: crowdsale.gzePerEth()=1.268714285714285714285e+21 1268.714285714285714285 GZE
-RESULT: Contributed 0 #4092 {"addr":"0xa44a08d3f6933c69212114bb66e2df1813651844","contributedEth":"5.7e+22","contributedUsd":"25310850","ethAmount":"5e+22","ethRefund":"0","generatedGze":"7.2316714285714285714285713e+25","gzeAmount":"6.3435714285714285714285714e+25","usdAmount":"22202500"}
-RESULT: Contributed 1 #4094 {"addr":"0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec","contributedEth":"7.8819952708028375182974e+22","contributedUsd":"34999999","ethAmount":"2.1819952708028375182974e+22","ethRefund":"8.180047291971624817026e+21","generatedGze":"9.9999999999999999999998869e+25","gzeAmount":"2.7683285714285714285713156e+25","usdAmount":"9689149"}
+RESULT: Contributed 0 #6197 {"addr":"0xa44a08d3f6933c69212114bb66e2df1813651844","contributedEth":"5.7e+22","contributedUsd":"25310850","ethAmount":"5e+22","ethRefund":"0","generatedGze":"7.2316714285714285714285713e+25","gzeAmount":"6.3435714285714285714285714e+25","usdAmount":"22202500"}
+RESULT: Contributed 1 #6199 {"addr":"0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec","contributedEth":"7.8819952708028375182974e+22","contributedUsd":"34999999","ethAmount":"2.1819952708028375182974e+22","ethRefund":"8.180047291971624817026e+21","generatedGze":"9.9999999999999999999998869e+25","gzeAmount":"2.7683285714285714285713156e+25","usdAmount":"9689149"}
 undefined
 > 
-RESULT: tokenContractAddress=0x68be0709e082674fc39e8047dd3967e8b96fc1b4
+RESULT: tokenContractAddress=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
 RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
 RESULT: token.newOwner=0x0000000000000000000000000000000000000000
 RESULT: token.symbol=GZE
@@ -810,12 +724,100 @@ RESULT: token.decimals=18
 RESULT: token.decimalsFactor=1000000000000000000
 RESULT: token.totalSupply=99999999.999999999999998869
 RESULT: token.transferable=false
+RESULT: token.mintable=true
+RESULT: token.minter=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
+RESULT: Transfer 0 #6197: from=0x0000000000000000000000000000000000000000 to=0xa44a08d3f6933c69212114bb66e2df1813651844 tokens=63435714.285714285714285714
+RESULT: Transfer 1 #6199: from=0x0000000000000000000000000000000000000000 to=0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec tokens=27683285.714285714285713156
+undefined
+> 
+RESULT: 
+undefined
+> 
+> 
+> 
+undefined
+> 
+undefined
+> 
+undefined
+> 
+RESULT: Finalise Crowdsale
+undefined
+> 
+undefined
+> 
+... 
+undefined
+> 
+RESULT:  # Account                                             EtherBalanceChange                          Token Name
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:  0 0xa00af22d07c87d96eeeb0ed583f8f6ac7812827e       63.010121926000000000           0.000000000000000000 Account #0 - Miner
+RESULT:  1 0xa11aae29840fbb5c86e6fd4cf809eba183aef433       -0.009749058000000000           0.000000000000000000 Account #1 - Contract Owner
+RESULT:  2 0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976    78819.952708028375182974           0.142857142857144475 Account #2 - Wallet
+RESULT:  3 0xa33a6c312d9ad0e0f2e95541beed0cc081621fd0    -4000.000076403000000000     5074857.142857142857142857 Account #3
+RESULT:  4 0xa44a08d3f6933c69212114bb66e2df1813651844   -50000.000076403000000000    63435714.285714285714285714 Account #4
+RESULT:  5 0xa55a151eb00fded1634d27d1127b4be4627079ea        0.000000000000000000           0.000000000000000000 Account #5
+RESULT:  6 0xa66a85ede0cbe03694aa9d9de0bb19c99ff55bd9    -3000.000136403000000000     3806142.857142857142857142 Account #6
+RESULT:  7 0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec   -21819.952791687375182974    27683285.714285714285713156 Account #7
+RESULT:  8 0xa88a05d2b88283ce84c8325760b72a64591279a2        0.000000000000000000     7142857.142857142857142776 Account #8 - Advisors
+RESULT:  9 0xa99a0ae3354c06b1459fd441a32a3f71005d7da0        0.000000000000000000    14285714.285714285714285552 Account #9 - Team
+RESULT: 10 0xaaaa9de1e6c564446ebca0fd102d8bd92093c756        0.000000000000000000     7142857.142857142857142776 Account #10 - Contractors
+RESULT: 11 0xabba43e7594e3b76afb157989e93c6621497fd4b        0.000000000000000000    14285714.285714285714285552 Account #11 - User Growth Pool
+RESULT: 12 0xd4b0de9c5abe8bf02c66df56e6dd25ea3714a567        0.000000000000000000           0.000000000000000000 BTTS Library
+RESULT: 13 0x10c7713fac5a0a4465a10b7300215447fa50b2d5        0.000000000000000000           0.000000000000000000 BTTSTokenFactory
+RESULT: 14 0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e        0.000000000000000000           0.000000000000000000 Token 'GZE' 'GazeCoin'
+RESULT: 15 0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd        0.000000000000000000           0.000000000000000000 GazeCoin Crowdsale
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT:                                                                             142857143.000000000000000000 Total Token Balances
+RESULT: -- ------------------------------------------ --------------------------- ------------------------------ ---------------------------
+RESULT: 
+undefined
+> 
+RESULT: PASS Finalise Crowdsale
+1
+> 
+RESULT: finalise_1Tx status=0x1 Success gas=1000000 gasUsed=178006 costETH=0.000178006 costUSD=0.08363077892 @ ETH/USD=469.82 gasPrice=1 gwei block=6201 txIx=0 txId=0x360830d5e0c8fb01f876c136e2cb4913d9a03d36f0450d0fb9402514875dd3a5 @ 1512279580 Sun, 03 Dec 2017 05:39:40 UTC
+undefined
+> 
+RESULT: crowdsaleContractAddress=0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd
+RESULT: crowdsale.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
+RESULT: crowdsale.newOwner=0x0000000000000000000000000000000000000000
+RESULT: crowdsale.wallet=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976
+RESULT: crowdsale.START_DATE=1512279402 Sun, 03 Dec 2017 05:36:42 UTC
+RESULT: crowdsale.END_DATE=1512279597 Sun, 03 Dec 2017 05:39:57 UTC
+RESULT: crowdsale.ethMinContribution=10000000000000000 0.01 ETH
+RESULT: crowdsale.usdCap=35000000
+RESULT: crowdsale.usdPerKEther=444050
+RESULT: crowdsale.contributedEth=7.8819952708028375182974e+22 78819.952708028375182974 ETH
+RESULT: crowdsale.contributedUsd=34999999
+RESULT: crowdsale.generatedGze=1.42857143e+26 142857143 GZE
+RESULT: crowdsale.bttsToken=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
+RESULT: crowdsale.usdCentPerGze=35
+RESULT: crowdsale.whitelistBonusPercent=20
+RESULT: crowdsale.ethCap=7.8819952708028375182974e+22 78819.952708028375182974 GZE
+RESULT: crowdsale.gzeFromEth(1 ether, 0%)=1.268714285714285714285e+21 1268.714285714285714285 GZE
+RESULT: crowdsale.gzeFromEth(1 ether, 20%)=1.522457142857142857142e+21 1522.457142857142857142 GZE
+RESULT: crowdsale.gzePerEth()=1.268714285714285714285e+21 1268.714285714285714285 GZE
+undefined
+> 
+RESULT: tokenContractAddress=0x54d5c0e2db65d60be3b591bcb94c11f2ac5c6e2e
+RESULT: token.owner=0xa11aae29840fbb5c86e6fd4cf809eba183aef433
+RESULT: token.newOwner=0x0000000000000000000000000000000000000000
+RESULT: token.symbol=GZE
+RESULT: token.name=GazeCoin
+RESULT: token.decimals=18
+RESULT: token.decimalsFactor=1000000000000000000
+RESULT: token.totalSupply=142857143
+RESULT: token.transferable=false
 RESULT: token.mintable=false
 RESULT: token.minter=0x0000000000000000000000000000000000000000
-RESULT: MinterUpdated 0 #4094 {"from":"0x491ef36b192b3fcd85b7b6a6cf9b94384b0360a6","to":"0x0000000000000000000000000000000000000000"}
-RESULT: MintingDisabled 0 #4094 {}
-RESULT: Transfer 0 #4092: from=0x0000000000000000000000000000000000000000 to=0xa44a08d3f6933c69212114bb66e2df1813651844 tokens=63435714.285714285714285714
-RESULT: Transfer 1 #4094: from=0x0000000000000000000000000000000000000000 to=0xa77a2b9d4b1c010a22a7c565dc418cef683dbcec tokens=27683285.714285714285713156
+RESULT: MinterUpdated 0 #6201 {"from":"0x26a5fcd005b5207a19bb11334ed7ff5f8d4dddcd","to":"0x0000000000000000000000000000000000000000"}
+RESULT: MintingDisabled 0 #6201 {}
+RESULT: Transfer 0 #6201: from=0x0000000000000000000000000000000000000000 to=0xa88a05d2b88283ce84c8325760b72a64591279a2 tokens=7142857.142857142857142776
+RESULT: Transfer 1 #6201: from=0x0000000000000000000000000000000000000000 to=0xa99a0ae3354c06b1459fd441a32a3f71005d7da0 tokens=14285714.285714285714285552
+RESULT: Transfer 2 #6201: from=0x0000000000000000000000000000000000000000 to=0xaaaa9de1e6c564446ebca0fd102d8bd92093c756 tokens=7142857.142857142857142776
+RESULT: Transfer 3 #6201: from=0x0000000000000000000000000000000000000000 to=0xabba43e7594e3b76afb157989e93c6621497fd4b tokens=14285714.285714285714285552
+RESULT: Transfer 4 #6201: from=0x0000000000000000000000000000000000000000 to=0xa22ab8a9d641ce77e06d98b7d7065d324d3d6976 tokens=0.142857142857144475
 undefined
 > 
 RESULT: 

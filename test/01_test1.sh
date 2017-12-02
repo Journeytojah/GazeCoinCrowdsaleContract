@@ -28,7 +28,7 @@ CURRENTTIMES=`date -r $CURRENTTIME -u`
 
 START_DATE=`echo "$CURRENTTIME+45" | bc`
 START_DATE_S=`date -r $START_DATE -u`
-END_DATE=`echo "$CURRENTTIME+45" | bc`
+END_DATE=`echo "$CURRENTTIME+60*4" | bc`
 END_DATE_S=`date -r $END_DATE -u`
 
 printf "MODE               = '$MODE'\n" | tee $TEST1OUTPUT
@@ -54,7 +54,7 @@ printf "END_DATE           = '$END_DATE' '$END_DATE_S'\n" | tee -a $TEST1OUTPUT
 
 # --- Modify parameters ---
 `perl -pi -e "s/START_DATE \= 1512921600;.*$/START_DATE \= $START_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
-`perl -pi -e "s/END_DATE \= 1513872000;.*$/END_DATE \= $START_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
+`perl -pi -e "s/END_DATE \= 1513872000;.*$/END_DATE \= $END_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
 
 DIFFS1=`diff $SOURCEDIR/$TOKENFACTORYSOL $TOKENFACTORYSOL`
 echo "--- Differences $SOURCEDIR/$TOKENFACTORYSOL $TOKENFACTORYSOL ---" | tee -a $TEST1OUTPUT
@@ -75,8 +75,6 @@ loadScript("$TOKENFACTORYJS");
 loadScript("$CROWDSALEJS");
 loadScript("functions.js");
 
-var tokenFactoryLibSMAbi = JSON.parse(tokenFactoryOutput.contracts["$TOKENFACTORYSOL:SafeMath"].abi);
-var tokenFactoryLibSMBin = "0x" + tokenFactoryOutput.contracts["$TOKENFACTORYSOL:SafeMath"].bin;
 var tokenFactoryLibBTTSAbi = JSON.parse(tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTSLib"].abi);
 var tokenFactoryLibBTTSBin = "0x" + tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTSLib"].bin;
 var tokenFactoryAbi = JSON.parse(tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTSTokenFactory"].abi);
@@ -85,8 +83,6 @@ var tokenAbi = JSON.parse(tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTSTok
 var crowdsaleAbi = JSON.parse(crowdsaleOutput.contracts["$CROWDSALESOL:GazeCoinCrowdsale"].abi);
 var crowdsaleBin = "0x" + crowdsaleOutput.contracts["$CROWDSALESOL:GazeCoinCrowdsale"].bin;
 
-// console.log("DATA: tokenFactoryLibSMAbi=" + JSON.stringify(tokenFactoryLibSMAbi));
-// console.log("DATA: tokenFactoryLibSMBin=" + JSON.stringify(tokenFactoryLibSMBin));
 // console.log("DATA: tokenFactoryLibBTTSAbi=" + JSON.stringify(tokenFactoryLibBTTSAbi));
 // console.log("DATA: tokenFactoryLibBTTSBin=" + JSON.stringify(tokenFactoryLibBTTSBin));
 // console.log("DATA: tokenFactoryAbi=" + JSON.stringify(tokenFactoryAbi));
@@ -101,47 +97,14 @@ console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
-var deployLibSMMessage = "Deploy BTTS SafeMath Library";
-// -----------------------------------------------------------------------------
-console.log("RESULT: " + deployLibSMMessage);
-var tokenFactoryLibSMContract = web3.eth.contract(tokenFactoryLibSMAbi);
-// console.log(JSON.stringify(tokenFactoryLibSMContract));
-var tokenFactoryLibSMTx = null;
-var tokenFactoryLibSMAddress = null;
-var tokenFactoryLibSM = tokenFactoryLibSMContract.new({from: contractOwnerAccount, data: tokenFactoryLibSMBin, gas: 6000000, gasPrice: defaultGasPrice},
-  function(e, contract) {
-    if (!e) {
-      if (!contract.address) {
-        tokenFactoryLibSMTx = contract.transactionHash;
-      } else {
-        tokenFactoryLibSMAddress = contract.address;
-        addAccount(tokenFactoryLibSMAddress, "BTTS SafeMath Library");
-        console.log("DATA: tokenFactoryLibSMAddress=" + tokenFactoryLibSMAddress);
-      }
-    }
-  }
-);
-while (txpool.status.pending > 0) {
-}
-printBalances();
-failIfTxStatusError(tokenFactoryLibSMTx, deployLibSMMessage);
-printTxData("tokenFactoryLibSMTx", tokenFactoryLibSMTx);
-printTokenContractDetails();
-console.log("RESULT: ");
-
-
-// -----------------------------------------------------------------------------
 var deployLibBTTSMessage = "Deploy BTTS Library";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + deployLibBTTSMessage);
-// console.log("RESULT: otokenFactoryLibBTTSBinld='" + tokenFactoryLibBTTSBin + "'");
-var newTokenFactoryLibBTTSBin = tokenFactoryLibBTTSBin.replace(/__BTTSTokenFactory\.sol\:SafeMath_________/g, tokenFactoryLibSMAddress.substring(2, 42));
-// console.log("RESULT: newTokenFactoryLibBTTSBin='" + newTokenFactoryLibBTTSBin + "'");
 var tokenFactoryLibBTTSContract = web3.eth.contract(tokenFactoryLibBTTSAbi);
 // console.log(JSON.stringify(tokenFactoryLibBTTSContract));
 var tokenFactoryLibBTTSTx = null;
 var tokenFactoryLibBTTSAddress = null;
-var tokenFactoryLibBTTS = tokenFactoryLibBTTSContract.new({from: contractOwnerAccount, data: newTokenFactoryLibBTTSBin, gas: 6000000, gasPrice: defaultGasPrice},
+var tokenFactoryLibBTTS = tokenFactoryLibBTTSContract.new({from: contractOwnerAccount, data: tokenFactoryLibBTTSBin, gas: 6000000, gasPrice: defaultGasPrice},
   function(e, contract) {
     if (!e) {
       if (!contract.address) {
@@ -168,8 +131,7 @@ var deployTokenFactoryMessage = "Deploy BTTSTokenFactory";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + deployTokenFactoryMessage);
 // console.log("RESULT: tokenFactoryBin='" + tokenFactoryBin + "'");
-var tempTokenFactoryBin = tokenFactoryBin.replace(/__BTTSTokenFactory\.sol\:SafeMath_________/g, tokenFactoryLibSMAddress.substring(2, 42));
-var newTokenFactoryBin = tempTokenFactoryBin.replace(/__BTTSTokenFactory\.sol\:BTTSLib__________/g, tokenFactoryLibBTTSAddress.substring(2, 42));
+var newTokenFactoryBin = tokenFactoryBin.replace(/__BTTSTokenFactory\.sol\:BTTSLib__________/g, tokenFactoryLibBTTSAddress.substring(2, 42));
 // console.log("RESULT: newTokenFactoryBin='" + newTokenFactoryBin + "'");
 var tokenFactoryContract = web3.eth.contract(tokenFactoryAbi);
 // console.log(JSON.stringify(tokenFactoryAbi));
@@ -278,6 +240,9 @@ printTokenContractDetails();
 console.log("RESULT: ");
 
 
+waitUntil("START_DATE", crowdsale.START_DATE(), 0);
+
+
 // -----------------------------------------------------------------------------
 var sendContribution1Message = "Send Contribution #1";
 // -----------------------------------------------------------------------------
@@ -311,6 +276,21 @@ failIfTxStatusError(sendContribution2_1Tx, sendContribution2Message + " - ac4 50
 failIfTxStatusError(sendContribution2_2Tx, sendContribution2Message + " - ac7 30,000 ETH");
 printTxData("sendContribution2_1Tx", sendContribution2_1Tx);
 printTxData("sendContribution2_2Tx", sendContribution2_2Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var finalise_Message = "Finalise Crowdsale";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + finalise_Message);
+var finalise_1Tx = crowdsale.finalise({from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(finalise_1Tx, finalise_Message);
+printTxData("finalise_1Tx", finalise_1Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");

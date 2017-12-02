@@ -1,29 +1,6 @@
 pragma solidity ^0.4.18;
 
 // ----------------------------------------------------------------------------
-// Safe maths
-// ----------------------------------------------------------------------------
-library SafeMath {
-    function add(uint a, uint b) public pure returns (uint c) {
-        c = a + b;
-        require(c >= a);
-    }
-    function sub(uint a, uint b) public pure returns (uint c) {
-        require(b <= a);
-        c = a - b;
-    }
-    function mul(uint a, uint b) public pure returns (uint c) {
-        c = a * b;
-        require(a == 0 || c / a == b);
-    }
-    function div(uint a, uint b) public pure returns (uint c) {
-        require(b > 0);
-        c = a / b;
-    }
-}
-
-
-// ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
 // ----------------------------------------------------------------------------
@@ -115,8 +92,6 @@ contract BTTSTokenInterface is ERC20Interface {
 // Enjoy. (c) BokkyPooBah / Bok Consulting Pty Ltd 2017. The MIT Licence.
 // ----------------------------------------------------------------------------
 library BTTSLib {
-    using SafeMath for uint;
-
     struct Data {
         // Ownership
         address owner;
@@ -178,6 +153,25 @@ library BTTSLib {
         self.transferable = transferable;
     }
 
+    // ------------------------------------------------------------------------
+    // Safe maths
+    // ------------------------------------------------------------------------
+    function safeAdd(uint a, uint b) internal pure returns (uint c) {
+        c = a + b;
+        require(c >= a);
+    }
+    function safeSub(uint a, uint b) internal pure returns (uint c) {
+        require(b <= a);
+        c = a - b;
+    }
+    function safeMul(uint a, uint b) internal pure returns (uint c) {
+        c = a * b;
+        require(a == 0 || c / a == b);
+    }
+    function safeDiv(uint a, uint b) internal pure returns (uint c) {
+        require(b > 0);
+        c = a / b;
+    }
 
     // ------------------------------------------------------------------------
     // Ownership
@@ -297,8 +291,8 @@ library BTTSLib {
     function transfer(Data storage self, address to, uint tokens) public returns (bool success) {
         // Owner and minter can move tokens before the tokens are transferable 
         require(self.transferable || (self.mintable && (msg.sender == self.owner  || msg.sender == self.minter)));
-        self.balances[msg.sender] = self.balances[msg.sender].sub(tokens);
-        self.balances[to] = self.balances[to].add(tokens);
+        self.balances[msg.sender] = safeSub(self.balances[msg.sender], tokens);
+        self.balances[to] = safeAdd(self.balances[to], tokens);
         Transfer(msg.sender, to, tokens);
         return true;
     }
@@ -309,9 +303,9 @@ library BTTSLib {
     }
     function transferFrom(Data storage self, address from, address to, uint tokens) public returns (bool success) {
         require(self.transferable);
-        self.balances[from] = self.balances[from].sub(tokens);
-        self.allowed[from][msg.sender] = self.allowed[from][msg.sender].sub(tokens);
-        self.balances[to] = self.balances[to].add(tokens);
+        self.balances[from] = safeSub(self.balances[from], tokens);
+        self.allowed[from][msg.sender] = safeSub(self.allowed[from][msg.sender], tokens);
+        self.balances[to] = safeAdd(self.balances[to], tokens);
         Transfer(from, to, tokens);
         return true;
     }
@@ -323,9 +317,9 @@ library BTTSLib {
     }
     function mint(Data storage self, address tokenOwner, uint tokens) internal returns (bool success) {
         require(self.mintable);
-        // TODO require(msg.sender == self.minter || msg.sender == self.owner);
-        self.balances[tokenOwner] = self.balances[tokenOwner].add(tokens);
-        self.totalSupply = self.totalSupply.add(tokens);
+        require(msg.sender == self.minter || msg.sender == self.owner);
+        self.balances[tokenOwner] = safeAdd(self.balances[tokenOwner], tokens);
+        self.totalSupply = safeAdd(self.totalSupply, tokens);
         Transfer(address(0), tokenOwner, tokens);
         return true;
     }
@@ -341,7 +335,7 @@ library BTTSLib {
         bytes32 hash = signedTransferHash(self, tokenContract, tokenOwner, to, tokens, fee, nonce);
         if (tokenOwner == address(0) || tokenOwner != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
         if (self.executed[tokenOwner][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
-        uint total = tokens.add(fee);
+        uint total = safeAdd(tokens, fee);
         if (self.balances[tokenOwner] < tokens) return BTTSTokenInterface.CheckResult.InsufficientTokens;
         if (self.balances[tokenOwner] < total) return BTTSTokenInterface.CheckResult.InsufficientTokensForFees;
         if (self.balances[to] + tokens < self.balances[to]) return BTTSTokenInterface.CheckResult.OverflowError;
@@ -354,11 +348,11 @@ library BTTSLib {
         require(tokenOwner != address(0) && tokenOwner == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
         require(!self.executed[tokenOwner][hash]);
         self.executed[tokenOwner][hash] = true;
-        self.balances[tokenOwner] = self.balances[tokenOwner].sub(tokens);
-        self.balances[to] = self.balances[to].add(tokens);
+        self.balances[tokenOwner] = safeSub(self.balances[tokenOwner], tokens);
+        self.balances[to] = safeAdd(self.balances[to], tokens);
         Transfer(tokenOwner, to, tokens);
-        self.balances[tokenOwner] = self.balances[tokenOwner].sub(fee);
-        self.balances[feeAccount] = self.balances[feeAccount].add(fee);
+        self.balances[tokenOwner] = safeSub(self.balances[tokenOwner], fee);
+        self.balances[feeAccount] = safeAdd(self.balances[feeAccount], fee);
         Transfer(tokenOwner, feeAccount, fee);
         return true;
     }
@@ -382,8 +376,8 @@ library BTTSLib {
         self.executed[tokenOwner][hash] = true;
         self.allowed[tokenOwner][spender] = tokens;
         Approval(tokenOwner, spender, tokens);
-        self.balances[tokenOwner] = self.balances[tokenOwner].sub(fee);
-        self.balances[feeAccount] = self.balances[feeAccount].add(fee);
+        self.balances[tokenOwner] = safeSub(self.balances[tokenOwner], fee);
+        self.balances[feeAccount] = safeAdd(self.balances[feeAccount], fee);
         Transfer(tokenOwner, feeAccount, fee);
         return true;
     }
@@ -395,7 +389,7 @@ library BTTSLib {
         bytes32 hash = signedTransferFromHash(self, tokenContract, spender, from, to, tokens, fee, nonce);
         if (spender == address(0) || spender != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
         if (self.executed[spender][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
-        uint total = tokens.add(fee);
+        uint total = safeAdd(tokens, fee);
         if (self.allowed[from][spender] < tokens) return BTTSTokenInterface.CheckResult.InsufficientApprovedTokens;
         if (self.allowed[from][spender] < total) return BTTSTokenInterface.CheckResult.InsufficientApprovedTokensForFees;
         if (self.balances[from] < tokens) return BTTSTokenInterface.CheckResult.InsufficientTokens;
@@ -410,13 +404,13 @@ library BTTSLib {
         require(spender != address(0) && spender == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
         require(!self.executed[spender][hash]);
         self.executed[spender][hash] = true;
-        self.balances[from] = self.balances[from].sub(tokens);
-        self.allowed[from][spender] = self.allowed[from][spender].sub(tokens);
-        self.balances[to] = self.balances[to].add(tokens);
+        self.balances[from] = safeSub(self.balances[from], tokens);
+        self.allowed[from][spender] = safeSub(self.allowed[from][spender], tokens);
+        self.balances[to] = safeAdd(self.balances[to], tokens);
         Transfer(from, to, tokens);
-        self.balances[from] = self.balances[from].sub(fee);
-        self.allowed[from][spender] = self.allowed[from][spender].sub(fee);
-        self.balances[feeAccount] = self.balances[feeAccount].add(fee);
+        self.balances[from] = safeSub(self.balances[from], fee);
+        self.allowed[from][spender] = safeSub(self.allowed[from][spender], fee);
+        self.balances[feeAccount] = safeAdd(self.balances[feeAccount], fee);
         Transfer(from, feeAccount, fee);
         return true;
     }
@@ -440,8 +434,8 @@ library BTTSLib {
         self.executed[tokenOwner][hash] = true;
         self.allowed[tokenOwner][spender] = tokens;
         Approval(tokenOwner, spender, tokens);
-        self.balances[tokenOwner] = self.balances[tokenOwner].sub(fee);
-        self.balances[feeAccount] = self.balances[feeAccount].add(fee);
+        self.balances[tokenOwner] = safeSub(self.balances[tokenOwner], fee);
+        self.balances[feeAccount] = safeAdd(self.balances[feeAccount], fee);
         Transfer(tokenOwner, feeAccount, fee);
         ApproveAndCallFallBack(spender).receiveApproval(msg.sender, tokens, tokenContract, data);
         return true;
