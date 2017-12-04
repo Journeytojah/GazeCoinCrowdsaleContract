@@ -15,6 +15,7 @@ pragma solidity ^0.4.18;
 // ----------------------------------------------------------------------------
 
 
+// ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
 // https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
 // ----------------------------------------------------------------------------
@@ -55,8 +56,10 @@ contract BTTSTokenInterface is ERC20Interface {
 
     event OwnershipTransferred(address indexed from, address indexed to);
     event MinterUpdated(address from, address to);
+    event Mint(address indexed tokenOwner, uint tokens, bool lockAccount);
     event MintingDisabled();
     event TransfersEnabled();
+    event AccountUnlocked(address indexed tokenOwner);
 
     function approveAndCall(address spender, uint tokens, bytes data) public returns (bool success);
 
@@ -79,7 +82,8 @@ contract BTTSTokenInterface is ERC20Interface {
     function signedApproveAndCallCheck(address tokenOwner, address spender, uint tokens, bytes data, uint fee, uint nonce, bytes sig, address feeAccount) public constant returns (CheckResult result);
     function signedApproveAndCall(address tokenOwner, address spender, uint tokens, bytes data, uint fee, uint nonce, bytes sig, address feeAccount) public returns (bool success);
 
-    function mint(address tokenOwner, uint tokens) public returns (bool success);
+    function mint(address tokenOwner, uint tokens, bool lockAccount) public returns (bool success);
+    function unlockAccount(address tokenOwner) public;
     function disableMinting() public;
     function enableTransfers() public;
 
@@ -89,13 +93,14 @@ contract BTTSTokenInterface is ERC20Interface {
     enum CheckResult {
         Success,                           // 0 Success
         NotTransferable,                   // 1 Tokens not transferable yet
-        SignerMismatch,                    // 2 Mismatch in signing account
-        AlreadyExecuted,                   // 3 Transfer already executed
-        InsufficientApprovedTokens,        // 4 Insufficient approved tokens
-        InsufficientApprovedTokensForFees, // 5 Insufficient approved tokens for fees
-        InsufficientTokens,                // 6 Insufficient tokens
-        InsufficientTokensForFees,         // 7 Insufficient tokens for fees
-        OverflowError                      // 8 Overflow error
+        AccountLocked,                     // 2 Account locked
+        SignerMismatch,                    // 3 Mismatch in signing account
+        AlreadyExecuted,                   // 4 Transfer already executed
+        InsufficientApprovedTokens,        // 5 Insufficient approved tokens
+        InsufficientApprovedTokensForFees, // 6 Insufficient approved tokens for fees
+        InsufficientTokens,                // 7 Insufficient tokens
+        InsufficientTokensForFees,         // 8 Insufficient tokens for fees
+        OverflowError                      // 9 Overflow error
     }
 }
 
@@ -174,6 +179,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     uint public usdCap = 35000000;
     // 01/12/2017 ETH/USD = 444.05
     uint public usdPerKEther = 444050;
+    uint public ethLockedThreshold = 6 ether;
     uint public contributedEth;
     uint public contributedUsd;
     uint public generatedGze;
@@ -183,22 +189,22 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     uint public whitelistBonusPercent = 20;
 
-    address public ADVISORS = 0xA88A05d2b88283ce84C8325760B72a64591279a2;
-    address public TEAM = 0xa99A0Ae3354c06B1459fd441a32a3F71005D7Da0;
-    address public CONTRACTORS = 0xAAAA9De1E6C564446EBCA0fd102D8Bd92093c756;
-    address public USERGROWTHPOOL = 0xaBBa43E7594E3B76afB157989e93c6621497FD4b;
-    uint public PERCENT_ADVISORS = 5;
-    uint public PERCENT_TEAM = 10;
-    uint public PERCENT_CONTRACTORS = 5;
-    uint public PERCENT_USERGROWTHPOOL = 10;
+    address public TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
+    uint public TEAM_PERCENT = 30;
 
+    event ETHLockedThresholdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
     event BTTSTokenUpdated(address indexed oldBTTSToken, address indexed newBTTSToken);
-    event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze);
+    event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
     function GazeCoinCrowdsale(address _wallet) public {
         wallet = _wallet;
     }
 
+    function setEthLockedThreshold(uint _ethLockedThreshold) public onlyOwner {
+        // TODO require(now <= START_DATE);
+        ETHLockedThresholdUpdated(ethLockedThreshold, _ethLockedThreshold);
+        ethLockedThreshold = _ethLockedThreshold;
+    }
     function setBTTSToken(address _bttsToken) public onlyOwner {
         // TODO require(now <= START_DATE);
         BTTSTokenUpdated(address(bttsToken), _bttsToken);
@@ -240,9 +246,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         generatedGze = safeAdd(generatedGze, gzeAmount);
         contributedEth = safeAdd(contributedEth, ethAmount);
         contributedUsd = safeAdd(contributedUsd, usdAmount);
-        bttsToken.mint(msg.sender, gzeAmount);
+        bool lockAccount = ethAmount > ethLockedThreshold;
+        bttsToken.mint(msg.sender, gzeAmount, lockAccount);
         wallet.transfer(ethAmount);
-        Contributed(msg.sender, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze);
+        Contributed(msg.sender, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
         if (ethRefund > 0) {
             msg.sender.transfer(ethRefund);
         }
@@ -257,26 +264,17 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function finalise() public onlyOwner {
-        uint percentToGenerate = safeAdd(PERCENT_ADVISORS, safeAdd(PERCENT_TEAM, safeAdd(PERCENT_CONTRACTORS, PERCENT_USERGROWTHPOOL)));
-        uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, percentToGenerate));
-        uint amountAdvisors = safeDiv(safeMul(total, PERCENT_ADVISORS), 100);
-        generatedGze = safeAdd(generatedGze, amountAdvisors);
-        bttsToken.mint(ADVISORS, amountAdvisors);
-        uint amountTeam = safeDiv(safeMul(total, PERCENT_TEAM), 100);
+        uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, TEAM_PERCENT));
+        uint amountTeam = safeDiv(safeMul(total, TEAM_PERCENT), 100);
         generatedGze = safeAdd(generatedGze, amountTeam);
-        bttsToken.mint(TEAM, amountTeam);
-        uint amountContractors = safeDiv(safeMul(total, PERCENT_CONTRACTORS), 100);
-        generatedGze = safeAdd(generatedGze, amountContractors);
-        bttsToken.mint(CONTRACTORS, amountContractors);
-        uint amountUserGrowthPool = safeDiv(safeMul(total, PERCENT_USERGROWTHPOOL), 100);
-        generatedGze = safeAdd(generatedGze, amountUserGrowthPool);
-        bttsToken.mint(USERGROWTHPOOL, amountUserGrowthPool);
+        bttsToken.mint(TEAM, amountTeam, false);
+
         // Round up
         uint rounded = roundUp(generatedGze);
         if (rounded > generatedGze) {
             uint dust = safeSub(rounded, generatedGze);
             generatedGze = safeAdd(generatedGze, dust);
-            bttsToken.mint(wallet, dust);
+            bttsToken.mint(wallet, dust, false);
         }
         if (contributedEth >= ethCap()) {
             // closed = true;

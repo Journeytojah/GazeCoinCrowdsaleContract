@@ -41,8 +41,10 @@ contract BTTSTokenInterface is ERC20Interface {
 
     event OwnershipTransferred(address indexed from, address indexed to);
     event MinterUpdated(address from, address to);
+    event Mint(address indexed tokenOwner, uint tokens, bool lockAccount);
     event MintingDisabled();
     event TransfersEnabled();
+    event AccountUnlocked(address indexed tokenOwner);
 
     function approveAndCall(address spender, uint tokens, bytes data) public returns (bool success);
 
@@ -65,7 +67,8 @@ contract BTTSTokenInterface is ERC20Interface {
     function signedApproveAndCallCheck(address tokenOwner, address spender, uint tokens, bytes data, uint fee, uint nonce, bytes sig, address feeAccount) public constant returns (CheckResult result);
     function signedApproveAndCall(address tokenOwner, address spender, uint tokens, bytes data, uint fee, uint nonce, bytes sig, address feeAccount) public returns (bool success);
 
-    function mint(address tokenOwner, uint tokens) public returns (bool success);
+    function mint(address tokenOwner, uint tokens, bool lockAccount) public returns (bool success);
+    function unlockAccount(address tokenOwner) public;
     function disableMinting() public;
     function enableTransfers() public;
 
@@ -75,13 +78,14 @@ contract BTTSTokenInterface is ERC20Interface {
     enum CheckResult {
         Success,                           // 0 Success
         NotTransferable,                   // 1 Tokens not transferable yet
-        SignerMismatch,                    // 2 Mismatch in signing account
-        AlreadyExecuted,                   // 3 Transfer already executed
-        InsufficientApprovedTokens,        // 4 Insufficient approved tokens
-        InsufficientApprovedTokensForFees, // 5 Insufficient approved tokens for fees
-        InsufficientTokens,                // 6 Insufficient tokens
-        InsufficientTokensForFees,         // 7 Insufficient tokens for fees
-        OverflowError                      // 8 Overflow error
+        AccountLocked,                     // 2 Account locked
+        SignerMismatch,                    // 3 Mismatch in signing account
+        AlreadyExecuted,                   // 4 Transfer already executed
+        InsufficientApprovedTokens,        // 5 Insufficient approved tokens
+        InsufficientApprovedTokensForFees, // 6 Insufficient approved tokens for fees
+        InsufficientTokens,                // 7 Insufficient tokens
+        InsufficientTokensForFees,         // 8 Insufficient tokens for fees
+        OverflowError                      // 9 Overflow error
     }
 }
 
@@ -96,7 +100,12 @@ library BTTSLib {
         // Ownership
         address owner;
         address newOwner;
+
+        // Minting and management
         address minter;
+        bool mintable;
+        bool transferable;
+        mapping(address => bool) accountLocked;
 
         // Token
         string symbol;
@@ -107,10 +116,6 @@ library BTTSLib {
         mapping(address => uint) balances;
         mapping(address => mapping(address => uint)) allowed;
         mapping(address => mapping(bytes32 => bool)) executed;
-
-        // Phase
-        bool mintable;
-        bool transferable;
     }
 
 
@@ -129,8 +134,10 @@ library BTTSLib {
     // ------------------------------------------------------------------------
     event OwnershipTransferred(address indexed from, address indexed to);
     event MinterUpdated(address from, address to);
+    event Mint(address indexed tokenOwner, uint tokens, bool lockAccount);
     event MintingDisabled();
     event TransfersEnabled();
+    event AccountUnlocked(address indexed tokenOwner);
     event Transfer(address indexed from, address indexed to, uint tokens);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 
@@ -192,16 +199,34 @@ library BTTSLib {
         self.owner = newOwner;
         self.newOwner = address(0);
     }
+
+    // ------------------------------------------------------------------------
+    // Minting and management
+    // ------------------------------------------------------------------------
     function setMinter(Data storage self, address minter) public {
         require(msg.sender == self.owner);
         require(self.mintable);
         MinterUpdated(self.minter, minter);
         self.minter = minter;
     }
-
-    // ------------------------------------------------------------------------
-    // Disable minting and enable transfers
-    // ------------------------------------------------------------------------
+    function mint(Data storage self, address tokenOwner, uint tokens, bool lockAccount) internal returns (bool success) {
+        require(self.mintable);
+        require(msg.sender == self.minter || msg.sender == self.owner);
+        if (lockAccount) {
+            self.accountLocked[tokenOwner] = true;
+        }
+        self.balances[tokenOwner] = safeAdd(self.balances[tokenOwner], tokens);
+        self.totalSupply = safeAdd(self.totalSupply, tokens);
+        Mint(tokenOwner, tokens, lockAccount);
+        Transfer(address(0), tokenOwner, tokens);
+        return true;
+    }
+    function unlockAccount(Data storage self, address tokenOwner) public {
+        require(msg.sender == self.owner);
+        require(self.accountLocked[tokenOwner]);
+        self.accountLocked[tokenOwner] = false;
+        AccountUnlocked(tokenOwner);
+    }
     function disableMinting(Data storage self) public {
         require(self.mintable);
         require(msg.sender == self.minter || msg.sender == self.owner);
@@ -266,6 +291,8 @@ library BTTSLib {
             return "Success";
         } else if (result == BTTSTokenInterface.CheckResult.NotTransferable) {
             return "Tokens not transferable yet";
+        } else if (result == BTTSTokenInterface.CheckResult.AccountLocked) {
+            return "Account locked";
         } else if (result == BTTSTokenInterface.CheckResult.SignerMismatch) {
             return "Mismatch in signing account";
         } else if (result == BTTSTokenInterface.CheckResult.AlreadyExecuted) {
@@ -291,18 +318,21 @@ library BTTSLib {
     function transfer(Data storage self, address to, uint tokens) public returns (bool success) {
         // Owner and minter can move tokens before the tokens are transferable 
         require(self.transferable || (self.mintable && (msg.sender == self.owner  || msg.sender == self.minter)));
+        require(!self.accountLocked[msg.sender]);
         self.balances[msg.sender] = safeSub(self.balances[msg.sender], tokens);
         self.balances[to] = safeAdd(self.balances[to], tokens);
         Transfer(msg.sender, to, tokens);
         return true;
     }
     function approve(Data storage self, address spender, uint tokens) public returns (bool success) {
+        require(!self.accountLocked[msg.sender]);
         self.allowed[msg.sender][spender] = tokens;
         Approval(msg.sender, spender, tokens);
         return true;
     }
     function transferFrom(Data storage self, address from, address to, uint tokens) public returns (bool success) {
         require(self.transferable);
+        require(!self.accountLocked[from]);
         self.balances[from] = safeSub(self.balances[from], tokens);
         self.allowed[from][msg.sender] = safeSub(self.allowed[from][msg.sender], tokens);
         self.balances[to] = safeAdd(self.balances[to], tokens);
@@ -310,17 +340,10 @@ library BTTSLib {
         return true;
     }
     function approveAndCall(Data storage self, address tokenContract, address spender, uint tokens, bytes data) public returns (bool success) {
+        require(!self.accountLocked[msg.sender]);
         self.allowed[msg.sender][spender] = tokens;
         Approval(msg.sender, spender, tokens);
         ApproveAndCallFallBack(spender).receiveApproval(msg.sender, tokens, tokenContract, data);
-        return true;
-    }
-    function mint(Data storage self, address tokenOwner, uint tokens) internal returns (bool success) {
-        require(self.mintable);
-        require(msg.sender == self.minter || msg.sender == self.owner);
-        self.balances[tokenOwner] = safeAdd(self.balances[tokenOwner], tokens);
-        self.totalSupply = safeAdd(self.totalSupply, tokens);
-        Transfer(address(0), tokenOwner, tokens);
         return true;
     }
 
@@ -334,6 +357,7 @@ library BTTSLib {
         if (!self.transferable) return BTTSTokenInterface.CheckResult.NotTransferable;
         bytes32 hash = signedTransferHash(self, tokenContract, tokenOwner, to, tokens, fee, nonce);
         if (tokenOwner == address(0) || tokenOwner != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
+        if (self.accountLocked[tokenOwner]) return BTTSTokenInterface.CheckResult.AccountLocked;
         if (self.executed[tokenOwner][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
         uint total = safeAdd(tokens, fee);
         if (self.balances[tokenOwner] < tokens) return BTTSTokenInterface.CheckResult.InsufficientTokens;
@@ -346,6 +370,7 @@ library BTTSLib {
         require(self.transferable);
         bytes32 hash = signedTransferHash(self, tokenContract, tokenOwner, to, tokens, fee, nonce);
         require(tokenOwner != address(0) && tokenOwner == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
+        require(!self.accountLocked[tokenOwner]);
         require(!self.executed[tokenOwner][hash]);
         self.executed[tokenOwner][hash] = true;
         self.balances[tokenOwner] = safeSub(self.balances[tokenOwner], tokens);
@@ -363,6 +388,7 @@ library BTTSLib {
         if (!self.transferable) return BTTSTokenInterface.CheckResult.NotTransferable;
         bytes32 hash = signedApproveHash(self, tokenContract, tokenOwner, spender, tokens, fee, nonce);
         if (tokenOwner == address(0) || tokenOwner != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
+        if (self.accountLocked[tokenOwner]) return BTTSTokenInterface.CheckResult.AccountLocked;
         if (self.executed[tokenOwner][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
         if (self.balances[tokenOwner] < fee) return BTTSTokenInterface.CheckResult.InsufficientTokensForFees;
         if (self.balances[feeAccount] + fee < self.balances[feeAccount]) return BTTSTokenInterface.CheckResult.OverflowError;
@@ -372,6 +398,7 @@ library BTTSLib {
         require(self.transferable);
         bytes32 hash = signedApproveHash(self, tokenContract, tokenOwner, spender, tokens, fee, nonce);
         require(tokenOwner != address(0) && tokenOwner == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
+        require(!self.accountLocked[tokenOwner]);
         require(!self.executed[tokenOwner][hash]);
         self.executed[tokenOwner][hash] = true;
         self.allowed[tokenOwner][spender] = tokens;
@@ -388,6 +415,7 @@ library BTTSLib {
         if (!self.transferable) return BTTSTokenInterface.CheckResult.NotTransferable;
         bytes32 hash = signedTransferFromHash(self, tokenContract, spender, from, to, tokens, fee, nonce);
         if (spender == address(0) || spender != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
+        if (self.accountLocked[from]) return BTTSTokenInterface.CheckResult.AccountLocked;
         if (self.executed[spender][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
         uint total = safeAdd(tokens, fee);
         if (self.allowed[from][spender] < tokens) return BTTSTokenInterface.CheckResult.InsufficientApprovedTokens;
@@ -402,6 +430,7 @@ library BTTSLib {
         require(self.transferable);
         bytes32 hash = signedTransferFromHash(self, tokenContract, spender, from, to, tokens, fee, nonce);
         require(spender != address(0) && spender == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
+        require(!self.accountLocked[from]);
         require(!self.executed[spender][hash]);
         self.executed[spender][hash] = true;
         self.balances[from] = safeSub(self.balances[from], tokens);
@@ -421,6 +450,7 @@ library BTTSLib {
         if (!self.transferable) return BTTSTokenInterface.CheckResult.NotTransferable;
         bytes32 hash = signedApproveAndCallHash(self, tokenContract, tokenOwner, spender, tokens, data, fee, nonce);
         if (tokenOwner == address(0) || tokenOwner != ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig)) return BTTSTokenInterface.CheckResult.SignerMismatch;
+        if (self.accountLocked[tokenOwner]) return BTTSTokenInterface.CheckResult.AccountLocked;
         if (self.executed[tokenOwner][hash]) return BTTSTokenInterface.CheckResult.AlreadyExecuted;
         if (self.balances[tokenOwner] < fee) return BTTSTokenInterface.CheckResult.InsufficientTokensForFees;
         if (self.balances[feeAccount] + fee < self.balances[feeAccount]) return BTTSTokenInterface.CheckResult.OverflowError;
@@ -430,6 +460,7 @@ library BTTSLib {
         require(self.transferable);
         bytes32 hash = signedApproveAndCallHash(self, tokenContract, tokenOwner, spender, tokens, data, fee, nonce);
         require(tokenOwner != address(0) && tokenOwner == ecrecoverFromSig(self, keccak256(signingPrefix, hash), sig));
+        require(!self.accountLocked[tokenOwner]);
         require(!self.executed[tokenOwner][hash]);
         self.executed[tokenOwner][hash] = true;
         self.allowed[tokenOwner][spender] = tokens;
@@ -478,12 +509,6 @@ contract BTTSToken is BTTSTokenInterface {
     function transferOwnershipImmediately(address _newOwner) public {
         data.transferOwnershipImmediately(_newOwner);
     }
-    function minter() public view returns (address) {
-        return data.minter;
-    }
-    function setMinter(address _minter) public {
-        data.setMinter(_minter);
-    }
 
     // ------------------------------------------------------------------------
     // Token
@@ -502,18 +527,26 @@ contract BTTSToken is BTTSTokenInterface {
     }
 
     // ------------------------------------------------------------------------
-    // State
+    // Minting and management
     // ------------------------------------------------------------------------
+    function minter() public view returns (address) {
+        return data.minter;
+    }
+    function setMinter(address _minter) public {
+        data.setMinter(_minter);
+    }
+    function mint(address tokenOwner, uint tokens, bool lockAccount) public returns (bool success) {
+        return data.mint(tokenOwner, tokens, lockAccount);
+    }
+    function unlockAccount(address tokenOwner) public {
+        return data.unlockAccount(tokenOwner);
+    }
     function mintable() public view returns (bool) {
         return data.mintable;
     }
     function transferable() public view returns (bool) {
         return data.transferable;
     }
-
-    // ------------------------------------------------------------------------
-    // Disable minting and enable transfers
-    // ------------------------------------------------------------------------
     function disableMinting() public {
         data.disableMinting();
     }
@@ -558,9 +591,6 @@ contract BTTSToken is BTTSTokenInterface {
     }
     function approveAndCall(address spender, uint tokens, bytes _data) public returns (bool success) {
         success = data.approveAndCall(this, spender, tokens, _data);
-    }
-    function mint(address tokenOwner, uint tokens) public returns (bool success) {
-        return data.mint(tokenOwner, tokens);
     }
 
     // ------------------------------------------------------------------------

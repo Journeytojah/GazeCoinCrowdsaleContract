@@ -11,29 +11,29 @@ var accountNames = {};
 addAccount(eth.accounts[0], "Account #0 - Miner");
 addAccount(eth.accounts[1], "Account #1 - Contract Owner");
 addAccount(eth.accounts[2], "Account #2 - Wallet");
-addAccount(eth.accounts[3], "Account #3");
+addAccount(eth.accounts[3], "Account #3 - Team Wallet");
 addAccount(eth.accounts[4], "Account #4");
 addAccount(eth.accounts[5], "Account #5");
 addAccount(eth.accounts[6], "Account #6");
 addAccount(eth.accounts[7], "Account #7");
-addAccount(eth.accounts[8], "Account #8 - Advisors");
-addAccount(eth.accounts[9], "Account #9 - Team");
-addAccount(eth.accounts[10], "Account #10 - Contractors");
-addAccount(eth.accounts[11], "Account #11 - User Growth Pool");
+addAccount(eth.accounts[8], "Account #8");
+addAccount(eth.accounts[9], "Account #9");
+addAccount(eth.accounts[10], "Account #10");
+addAccount(eth.accounts[11], "Account #11");
 
 
 var minerAccount = eth.accounts[0];
 var contractOwnerAccount = eth.accounts[1];
 var wallet = eth.accounts[2];
-var account3 = eth.accounts[3];
+var teamWallet = eth.accounts[3];
 var account4 = eth.accounts[4];
 var account5 = eth.accounts[5];
 var account6 = eth.accounts[6];
 var account7 = eth.accounts[7];
-var advisors = eth.accounts[8];
-var team = eth.accounts[9];
-var contractors = eth.accounts[10];
-var userGrowthPool = eth.accounts[11];
+var account8 = eth.accounts[8];
+var account9 = eth.accounts[9];
+var account10 = eth.accounts[10];
+var account11 = eth.accounts[11];
 
 var baseBlock = eth.blockNumber;
 
@@ -271,12 +271,26 @@ function printTokenContractDetails() {
     });
     minterUpdatedEvents.stopWatching();
 
+    var mintEvents = contract.Mint({}, { fromBlock: tokenFromBlock, toBlock: latestBlock });
+    i = 0;
+    mintEvents.watch(function (error, result) {
+      console.log("RESULT: Mint " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    mintEvents.stopWatching();
+
     var mintingDisabledEvents = contract.MintingDisabled({}, { fromBlock: tokenFromBlock, toBlock: latestBlock });
     i = 0;
     mintingDisabledEvents.watch(function (error, result) {
       console.log("RESULT: MintingDisabled " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     mintingDisabledEvents.stopWatching();
+
+    var accountUnlockedEvents = contract.AccountUnlocked({}, { fromBlock: tokenFromBlock, toBlock: latestBlock });
+    i = 0;
+    accountUnlockedEvents.watch(function (error, result) {
+      console.log("RESULT: AccountUnlocked " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    accountUnlockedEvents.stopWatching();
 
     var approvalEvents = contract.Approval({}, { fromBlock: tokenFromBlock, toBlock: latestBlock });
     i = 0;
@@ -323,6 +337,7 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.ethMinContribution=" + contract.ethMinContribution() + " " + contract.ethMinContribution().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.usdCap=" + contract.usdCap());
     console.log("RESULT: crowdsale.usdPerKEther=" + contract.usdPerKEther());
+    console.log("RESULT: crowdsale.ethLockedThreshold=" + contract.ethLockedThreshold() + " " + contract.ethLockedThreshold().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedEth=" + contract.contributedEth() + " " + contract.contributedEth().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedUsd=" + contract.contributedUsd());
     console.log("RESULT: crowdsale.generatedGze=" + contract.generatedGze() + " " + contract.generatedGze().shift(-18) + " GZE");
@@ -330,6 +345,8 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.usdCentPerGze=" + contract.usdCentPerGze());
     console.log("RESULT: crowdsale.whitelistBonusPercent=" + contract.whitelistBonusPercent());
     console.log("RESULT: crowdsale.ethCap=" + contract.ethCap() + " " + contract.ethCap().shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.TEAM=" + contract.TEAM());
+    console.log("RESULT: crowdsale.TEAM_PERCENT=" + contract.TEAM_PERCENT());
     var oneEther = web3.toWei(1, "ether");
     console.log("RESULT: crowdsale.gzeFromEth(1 ether, 0%)=" + contract.gzeFromEth(oneEther, 0) + " " + contract.gzeFromEth(oneEther, 0).shift(-18) + " GZE");
     console.log("RESULT: crowdsale.gzeFromEth(1 ether, 20%)=" + contract.gzeFromEth(oneEther, 20) + " " + contract.gzeFromEth(oneEther, 20).shift(-18) + " GZE");
@@ -344,6 +361,13 @@ function printCrowdsaleContractDetails() {
       console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     ownershipTransferredEvents.stopWatching();
+
+    var ethLockedThresholdUpdatedEvents = contract.ETHLockedThresholdUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    ethLockedThresholdUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: ETHLockedThresholdUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    ethLockedThresholdUpdatedEvents.stopWatching();
 
     var bttsTokenUpdatedEvents = contract.BTTSTokenUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
