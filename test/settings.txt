@@ -7,6 +7,10 @@ TOKENFACTORYSOL=BTTSTokenFactory.sol
 TOKENFACTORYJS=BTTSTokenFactory.js
 CROWDSALESOL=GazeCoinCrowdsale.sol
 CROWDSALEJS=GazeCoinCrowdsale.js
+BOUNTYLISTSOL=GazeCoinBountyList.sol
+BOUNTYLISTJS=GazeCoinBountyList.js
+LOCKEDWALLETSOL=GazeCoinLockedWallet.sol
+LOCKEDWALLETJS=GazeCoinLockedWallet.js
 
 DEPLOYMENTDATA=deploymentData.txt
 

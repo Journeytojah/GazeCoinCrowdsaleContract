@@ -12,7 +12,7 @@ addAccount(eth.accounts[0], "Account #0 - Miner");
 addAccount(eth.accounts[1], "Account #1 - Contract Owner");
 addAccount(eth.accounts[2], "Account #2 - Wallet");
 addAccount(eth.accounts[3], "Account #3 - Team Wallet");
-addAccount(eth.accounts[4], "Account #4");
+addAccount(eth.accounts[4], "Account #4 - Bounty List");
 addAccount(eth.accounts[5], "Account #5");
 addAccount(eth.accounts[6], "Account #6");
 addAccount(eth.accounts[7], "Account #7");
@@ -332,19 +332,23 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.owner=" + contract.owner());
     console.log("RESULT: crowdsale.newOwner=" + contract.newOwner());
     console.log("RESULT: crowdsale.wallet=" + contract.wallet());
+    console.log("RESULT: crowdsale.lockedWallet=" + contract.lockedWallet());
     console.log("RESULT: crowdsale.START_DATE=" + contract.START_DATE() + " " + new Date(contract.START_DATE() * 1000).toUTCString());
     console.log("RESULT: crowdsale.END_DATE=" + contract.END_DATE() + " " + new Date(contract.END_DATE() * 1000).toUTCString());
     console.log("RESULT: crowdsale.ethMinContribution=" + contract.ethMinContribution() + " " + contract.ethMinContribution().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.usdCap=" + contract.usdCap());
     console.log("RESULT: crowdsale.usdPerKEther=" + contract.usdPerKEther());
-    console.log("RESULT: crowdsale.ethLockedThreshold=" + contract.ethLockedThreshold() + " " + contract.ethLockedThreshold().shift(-18) + " ETH");
+    console.log("RESULT: crowdsale.lockedAccountUsdThreshold=" + contract.lockedAccountUsdThreshold());
+    console.log("RESULT: crowdsale.lockedAccountEthThreshold=" + contract.lockedAccountEthThreshold() + " " + contract.lockedAccountEthThreshold().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedEth=" + contract.contributedEth() + " " + contract.contributedEth().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedUsd=" + contract.contributedUsd());
     console.log("RESULT: crowdsale.generatedGze=" + contract.generatedGze() + " " + contract.generatedGze().shift(-18) + " GZE");
     console.log("RESULT: crowdsale.bttsToken=" + contract.bttsToken());
+    console.log("RESULT: crowdsale.bountyList=" + contract.bountyList());
     console.log("RESULT: crowdsale.usdCentPerGze=" + contract.usdCentPerGze());
-    console.log("RESULT: crowdsale.whitelistBonusPercent=" + contract.whitelistBonusPercent());
-    console.log("RESULT: crowdsale.ethCap=" + contract.ethCap() + " " + contract.ethCap().shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.bountyListBonusPercent=" + contract.bountyListBonusPercent());
+    console.log("RESULT: crowdsale.ethCap=" + contract.ethCap() + " " + contract.ethCap().shift(-18) + " ETH");
+    console.log("RESULT: crowdsale.lockedWalletEthThreshold=" + contract.lockedWalletEthThreshold() + " " + contract.lockedWalletEthThreshold().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.TEAM=" + contract.TEAM());
     console.log("RESULT: crowdsale.TEAM_PERCENT=" + contract.TEAM_PERCENT());
     var oneEther = web3.toWei(1, "ether");
@@ -362,12 +366,12 @@ function printCrowdsaleContractDetails() {
     });
     ownershipTransferredEvents.stopWatching();
 
-    var ethLockedThresholdUpdatedEvents = contract.ETHLockedThresholdUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    var lockedAccountUsdThresholdUpdatedEvents = contract.LockedAccountUsdThresholdUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
-    ethLockedThresholdUpdatedEvents.watch(function (error, result) {
-      console.log("RESULT: ETHLockedThresholdUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    lockedAccountUsdThresholdUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: LockedAccountUsdThresholdUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
-    ethLockedThresholdUpdatedEvents.stopWatching();
+    lockedAccountUsdThresholdUpdatedEvents.stopWatching();
 
     var bttsTokenUpdatedEvents = contract.BTTSTokenUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
@@ -375,6 +379,13 @@ function printCrowdsaleContractDetails() {
       console.log("RESULT: BTTSTokenUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     bttsTokenUpdatedEvents.stopWatching();
+
+    var bountyListUpdatedEvents = contract.BountyListUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    bountyListUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: BountyListUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    bountyListUpdatedEvents.stopWatching();
 
     var contributedEvents = contract.Contributed({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
@@ -449,3 +460,108 @@ function printTokenFactoryContractDetails() {
   }
 }
 
+
+// -----------------------------------------------------------------------------
+// BountyList Contract
+// -----------------------------------------------------------------------------
+var bountyListContractAddress = null;
+var bountyListContractAbi = null;
+
+function addBountyListContractAddressAndAbi(address, bountyListAbi) {
+  bountyListContractAddress = address;
+  bountyListContractAbi = bountyListAbi;
+}
+
+var bountyListFromBlock = 0;
+function printBountyListContractDetails() {
+  console.log("RESULT: bountyListContractAddress=" + bountyListContractAddress);
+  if (bountyListContractAddress != null && bountyListContractAbi != null) {
+    var contract = eth.contract(bountyListContractAbi).at(bountyListContractAddress);
+    console.log("RESULT: bountyList.owner=" + contract.owner());
+    console.log("RESULT: bountyList.newOwner=" + contract.newOwner());
+    console.log("RESULT: bountyList.sealed=" + contract.sealed());
+
+    var latestBlock = eth.blockNumber;
+    var i;
+
+    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    i = 0;
+    ownershipTransferredEvents.watch(function (error, result) {
+      console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    ownershipTransferredEvents.stopWatching();
+
+    var adminAddedEvents = contract.AdminAdded({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    i = 0;
+    adminAddedEvents.watch(function (error, result) {
+      console.log("RESULT: AdminAdded " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    adminAddedEvents.stopWatching();
+
+    var adminRemovedEvents = contract.AdminRemoved({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    i = 0;
+    adminRemovedEvents.watch(function (error, result) {
+      console.log("RESULT: AdminRemoved " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    adminRemovedEvents.stopWatching();
+
+    var addressListedEvents = contract.AddressListed({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    i = 0;
+    addressListedEvents.watch(function (error, result) {
+      console.log("RESULT: AddressListed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    addressListedEvents.stopWatching();
+
+    bountyListFromBlock = latestBlock + 1;
+  }
+}
+
+
+// -----------------------------------------------------------------------------
+// LockedWallet Contract
+// -----------------------------------------------------------------------------
+var lockedWalletContractAddress = null;
+var lockedWalletContractAbi = null;
+
+function addLockedWalletContractAddressAndAbi(address, lockedWalletAbi) {
+  lockedWalletContractAddress = address;
+  lockedWalletContractAbi = lockedWalletAbi;
+}
+
+var lockedWalletFromBlock = 0;
+function printLockedWalletContractDetails() {
+  console.log("RESULT: lockedWalletContractAddress=" + lockedWalletContractAddress);
+  if (lockedWalletContractAddress != null && lockedWalletContractAbi != null) {
+    var contract = eth.contract(lockedWalletContractAbi).at(lockedWalletContractAddress);
+    console.log("RESULT: lockedWallet.owner=" + contract.owner());
+    console.log("RESULT: lockedWallet.newOwner=" + contract.newOwner());
+    console.log("RESULT: lockedWallet.lockedPeriod=" + contract.lockedPeriod());
+    console.log("RESULT: crowdsale.lockedTo=" + contract.lockedTo() + " " + new Date(contract.lockedTo() * 1000).toUTCString());
+
+    var latestBlock = eth.blockNumber;
+    var i;
+
+    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
+    i = 0;
+    ownershipTransferredEvents.watch(function (error, result) {
+      console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    ownershipTransferredEvents.stopWatching();
+
+    var ethersWithdrawnEvents = contract.EthersWithdrawn({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
+    i = 0;
+    ethersWithdrawnEvents.watch(function (error, result) {
+      console.log("RESULT: EthersWithdrawn " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    ethersWithdrawnEvents.stopWatching();
+
+    var tokensWithdrawnEvents = contract.TokensWithdrawn({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
+    i = 0;
+    tokensWithdrawnEvents.watch(function (error, result) {
+      console.log("RESULT: TokensWithdrawn " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    tokensWithdrawnEvents.stopWatching();
+
+    lockedWalletFromBlock = latestBlock + 1;
+  }
+}
