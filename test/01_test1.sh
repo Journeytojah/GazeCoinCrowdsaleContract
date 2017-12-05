@@ -26,7 +26,7 @@ TEST1RESULTS=`grep ^TEST1RESULTS= settings.txt | sed "s/^.*=//"`
 CURRENTTIME=`date +%s`
 CURRENTTIMES=`date -r $CURRENTTIME -u`
 
-START_DATE=`echo "$CURRENTTIME+45" | bc`
+START_DATE=`echo "$CURRENTTIME+90" | bc`
 START_DATE_S=`date -r $START_DATE -u`
 END_DATE=`echo "$CURRENTTIME+60*4" | bc`
 END_DATE_S=`date -r $END_DATE -u`
@@ -240,6 +240,21 @@ printTokenContractDetails();
 console.log("RESULT: ");
 
 
+// -----------------------------------------------------------------------------
+var addPrecommitment_Message = "Add Precommitment";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + addPrecommitment_Message);
+var addPrecommitment_1Tx = crowdsale.addPrecommitment(account8, web3.toWei(1000, "ether"), 35, {from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(addPrecommitment_1Tx, addPrecommitment_Message);
+printTxData("addPrecommitment_1Tx", addPrecommitment_1Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
 waitUntil("START_DATE", crowdsale.START_DATE(), 0);
 
 
@@ -276,6 +291,21 @@ failIfTxStatusError(sendContribution2_1Tx, sendContribution2Message + " - ac4 50
 failIfTxStatusError(sendContribution2_2Tx, sendContribution2Message + " - ac7 30,000 ETH");
 printTxData("sendContribution2_1Tx", sendContribution2_1Tx);
 printTxData("sendContribution2_2Tx", sendContribution2_2Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var addPrecommitmentFloor_Message = "Add Precommitment Floor";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + addPrecommitmentFloor_Message);
+var addPrecommitmentFloor_1Tx = crowdsale.addPrecommitmentFloor(account8, new BigNumber("111").shift(18), {from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(addPrecommitmentFloor_1Tx, addPrecommitmentFloor_Message);
+printTxData("addPrecommitmentFloor_1Tx", addPrecommitmentFloor_1Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");

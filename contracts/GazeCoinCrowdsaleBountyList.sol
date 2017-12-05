@@ -1,9 +1,9 @@
-pragma solidity ^0.4.16;
+pragma solidity ^0.4.18;
 
 // ----------------------------------------------------------------------------
-// GazeCoin Crowdsale Whitelist
+// GazeCoin Crowdsale Bounty List
 //
-// Deployed to : 0x73855EE8C390C5c6741e14c18F6017A5b877F428
+// Deployed to : 
 //
 // Enjoy.
 //
@@ -106,9 +106,9 @@ contract Administered is Owned {
 
 
 // ----------------------------------------------------------------------------
-// ERC20 Token, with the addition of symbol, name and decimals
+// Bounty list
 // ----------------------------------------------------------------------------
-contract GazeCoinCrowdsaleWhitelist is Administered {
+contract GazeCoinCrowdsaleBountyList is Administered {
 
     // ------------------------------------------------------------------------
     // Administrators can add until sealed
@@ -118,32 +118,32 @@ contract GazeCoinCrowdsaleWhitelist is Administered {
     // ------------------------------------------------------------------------
     // The whitelist, true for enabled, false for disabled
     // ------------------------------------------------------------------------
-    mapping(address => bool) public whitelist;
+    mapping(address => bool) public bountyList;
 
     // ------------------------------------------------------------------------
     // Events
     // ------------------------------------------------------------------------
-    event Whitelisted(address indexed whitelistedAddress, bool enabled);
+    event AddressListed(address indexed addr, bool enabled);
 
 
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function GazeCoinCrowdsaleWhitelist() public {
+    function GazeCoinCrowdsaleBountyList() public {
     }
 
 
     // ------------------------------------------------------------------------
     // Whitelist
     // ------------------------------------------------------------------------
-    function enable(address[] _addresses) public onlyAdministrator {
+    function enable(address[] addresses) public onlyAdministrator {
         require(!sealed);
-        require(_addresses.length != 0);
-        for (uint i = 0; i < _addresses.length; i++) {
-            require(_addresses[i] != 0x0);
-            if (!whitelist[_addresses[i]]) {
-                whitelist[_addresses[i]] = true;
-                Whitelisted(_addresses[i], true);
+        require(addresses.length != 0);
+        for (uint i = 0; i < addresses.length; i++) {
+            require(addresses[i] != 0x0);
+            if (!bountyList[addresses[i]]) {
+                bountyList[addresses[i]] = true;
+                AddressListed(addresses[i], true);
             }
         }
     }
@@ -152,14 +152,14 @@ contract GazeCoinCrowdsaleWhitelist is Administered {
     // ------------------------------------------------------------------------
     // Disable whitelisting
     // ------------------------------------------------------------------------
-    function disable(address[] _addresses) public onlyAdministrator {
+    function disable(address[] addresses) public onlyAdministrator {
         require(!sealed);
-        require(_addresses.length != 0);
-        for (uint i = 0; i < _addresses.length; i++) {
-            require(_addresses[i] != 0x0);
-            if (whitelist[_addresses[i]]) {
-                whitelist[_addresses[i]] = false;
-                Whitelisted(_addresses[i], false);
+        require(addresses.length != 0);
+        for (uint i = 0; i < addresses.length; i++) {
+            require(addresses[i] != 0x0);
+            if (bountyList[addresses[i]]) {
+                bountyList[addresses[i]] = false;
+                AddressListed(addresses[i], false);
             }
         }
     }

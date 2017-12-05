@@ -164,21 +164,23 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     address public wallet;
 
+    // https://www.worldtimebuddy.com/?qm=1&lid=5,100,2147714&h=5&date=2017-12-11&sln=11-11.5
+
     // Start 11 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-10T16:00:00").getTime()/1000 => 1512921600
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public START_DATE = 1512388674; // Mon  4 Dec 2017 11:57:54 UTC
+    uint public START_DATE = 1512477107; // Tue  5 Dec 2017 12:31:47 UTC
 
     // End 21 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-21T16:00:00").getTime()/1000 => 1513872000
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public END_DATE = 1512388869; // Mon  4 Dec 2017 11:57:54 UTC
+    uint public END_DATE = 1512477257; // Tue  5 Dec 2017 12:31:47 UTC
 
     uint public ethMinContribution = 0.01 ether;
 
     uint public usdCap = 35000000;
-    // 01/12/2017 ETH/USD = 444.05
-    uint public usdPerKEther = 444050;
+    // 05/12/2017 ETH/USD = 462.91
+    uint public usdPerKEther = 462910;
     uint public ethLockedThreshold = 6 ether;
     uint public contributedEth;
     uint public contributedUsd;
@@ -188,6 +190,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     uint public usdCentPerGze = 35;
 
     uint public whitelistBonusPercent = 20;
+    bool public finalised;
 
     address public TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
     uint public TEAM_PERCENT = 30;
@@ -241,7 +244,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
             ethAmount = safeSub(ethCap(), contributedEth);
             ethRefund = safeSub(msg.value, ethAmount);
         }
-        uint usdAmount = ethAmount * usdPerKEther / 10**uint(3 + 18);
+        uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
         generatedGze = safeAdd(generatedGze, gzeAmount);
         contributedEth = safeAdd(contributedEth, ethAmount);
@@ -255,6 +258,32 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         }
     }
 
+    function addPrecommitment(address tokenOwner, uint ethAmount, uint bonusPercent) public onlyOwner {
+        // TODO require(now < START_DATE);
+        require(!finalised);
+        uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
+        uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
+        uint ethRefund = 0;
+        generatedGze = safeAdd(generatedGze, gzeAmount);
+        contributedEth = safeAdd(contributedEth, ethAmount);
+        contributedUsd = safeAdd(contributedUsd, usdAmount);
+        bool lockAccount = false;
+        bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
+        Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+    }
+
+    function addPrecommitmentFloor(address tokenOwner, uint gzeAmount) public onlyOwner {
+        // TODO require(now > END_DATE);
+        require(!finalised);
+        uint ethAmount = 0;
+        uint usdAmount = 0;
+        uint ethRefund = 0;
+        generatedGze = safeAdd(generatedGze, gzeAmount);
+        bool lockAccount = false;
+        bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
+        Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+    }
+
     function roundUp(uint a) public pure returns (uint) {
         uint multiple = 10**18;
         uint remainder = a % multiple;
@@ -264,6 +293,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function finalise() public onlyOwner {
+        require(!finalised);
         uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, TEAM_PERCENT));
         uint amountTeam = safeDiv(safeMul(total, TEAM_PERCENT), 100);
         generatedGze = safeAdd(generatedGze, amountTeam);
@@ -280,5 +310,6 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
             // closed = true;
             bttsToken.disableMinting();
         }
+        finalised = true;
     }
 }
