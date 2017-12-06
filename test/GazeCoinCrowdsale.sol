@@ -106,10 +106,10 @@ contract BTTSTokenInterface is ERC20Interface {
 
 
 // ----------------------------------------------------------------------------
-// Bounty list interface
+// Bonus list interface
 // ----------------------------------------------------------------------------
-contract BountyListInterface {
-    mapping(address => bool) public bountyList;
+contract BonusListInterface {
+    mapping(address => uint) public bonusList;
 }
 
 
@@ -179,12 +179,12 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     // Start 11 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-10T16:00:00").getTime()/1000 => 1512921600
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public START_DATE = 1512534483; // Wed  6 Dec 2017 04:28:03 UTC
+    uint public START_DATE = 1512555971; // Wed  6 Dec 2017 10:26:11 UTC
 
     // End 21 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-21T16:00:00").getTime()/1000 => 1513872000
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public END_DATE = 1512534633; // Wed  6 Dec 2017 04:28:03 UTC
+    uint public END_DATE = 1512556121; // Wed  6 Dec 2017 10:26:11 UTC
 
     uint public ethMinContribution = 0.01 ether;
 
@@ -197,11 +197,12 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     uint public contributedUsd;
     uint public generatedGze;
     BTTSTokenInterface public bttsToken;
-    BountyListInterface public bountyList;
+    BonusListInterface public bonusList;
 
     uint public usdCentPerGze = 35;
 
-    uint public bountyListBonusPercent = 20;
+    uint public TIER1_BONUS = 20;
+    uint public TIER2_BONUS = 15;
     bool public finalised;
 
     address public TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
@@ -209,7 +210,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     event LockedAccountUsdThresholdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
     event BTTSTokenUpdated(address indexed oldBTTSToken, address indexed newBTTSToken);
-    event BountyListUpdated(address indexed oldBountyList, address indexed newBountyList);
+    event BonusListUpdated(address indexed oldBonusList, address indexed newBonusList);
     event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
     function GazeCoinCrowdsale(address _wallet, address _lockedWallet) public {
@@ -227,10 +228,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         BTTSTokenUpdated(address(bttsToken), _bttsToken);
         bttsToken = BTTSTokenInterface(_bttsToken);
     }
-    function setBountyList(address _bountyList) public onlyOwner {
+    function setBonusList(address _bonusList) public onlyOwner {
         // TODO require(now <= START_DATE);
-        BountyListUpdated(address(bountyList), _bountyList);
-        bountyList = BountyListInterface(_bountyList);
+        BonusListUpdated(address(bonusList), _bonusList);
+        bonusList = BonusListInterface(_bonusList);
     }
 
     function ethCap() public view returns (uint) {
@@ -262,7 +263,15 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         require(now >= START_DATE && now <= END_DATE);
         require(contributedEth < ethCap());
         require(msg.value >= ethMinContribution);
-        uint bonusPercent = bountyList.bountyList(msg.sender) ? bountyListBonusPercent : 0;
+        uint tier = bonusList.bonusList(msg.sender);
+        uint bonusPercent;
+        if (tier == 1) {
+            bonusPercent = TIER1_BONUS;
+        } else if (tier == 2) {
+            bonusPercent = TIER2_BONUS;
+        } else {
+            bonusPercent = 0;
+        }
         uint ethAmount = msg.value;
         uint ethRefund = 0;
         if (safeAdd(contributedEth, ethAmount) > ethCap()) {

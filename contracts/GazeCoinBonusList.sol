@@ -1,7 +1,7 @@
 pragma solidity ^0.4.18;
 
 // ----------------------------------------------------------------------------
-// GazeCoin Crowdsale Bounty List
+// GazeCoin Crowdsale Bonus List
 //
 // Deployed to : 
 //
@@ -68,35 +68,35 @@ contract Admined is Owned {
 
 
 // ----------------------------------------------------------------------------
-// Bounty list
+// Bonus list - Tiers 1 and 2, with 0 as disabled
 // ----------------------------------------------------------------------------
-contract GazeCoinBountyList is Admined {
+contract GazeCoinBonusList is Admined {
     bool public sealed;
-    mapping(address => bool) public bountyList;
+    mapping(address => uint) public bonusList;
 
-    event AddressListed(address indexed addr, bool enabled);
+    event AddressListed(address indexed addr, uint tier);
 
-    function GazeCoinBountyList() public {
+    function GazeCoinBonusList() public {
     }
-    function enable(address[] addresses) public onlyAdmin {
+    function add(address[] addresses, uint tier) public onlyAdmin {
         require(!sealed);
         require(addresses.length != 0);
         for (uint i = 0; i < addresses.length; i++) {
             require(addresses[i] != address(0));
-            if (!bountyList[addresses[i]]) {
-                bountyList[addresses[i]] = true;
-                AddressListed(addresses[i], true);
+            if (bonusList[addresses[i]] == 0) {
+                bonusList[addresses[i]] = tier;
+                AddressListed(addresses[i], tier);
             }
         }
     }
-    function disable(address[] addresses) public onlyAdmin {
+    function remove(address[] addresses) public onlyAdmin {
         require(!sealed);
         require(addresses.length != 0);
         for (uint i = 0; i < addresses.length; i++) {
             require(addresses[i] != address(0));
-            if (bountyList[addresses[i]]) {
-                bountyList[addresses[i]] = false;
-                AddressListed(addresses[i], false);
+            if (bonusList[addresses[i]] != 0) {
+                bonusList[addresses[i]] = 0;
+                AddressListed(addresses[i], 0);
             }
         }
     }
@@ -105,5 +105,6 @@ contract GazeCoinBountyList is Admined {
         sealed = true;
     }
     function () public {
+        revert();
     }
 }

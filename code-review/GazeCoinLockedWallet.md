@@ -81,9 +81,11 @@ contract GazeCoinLockedWallet is Owned {
         owner.transfer(this.balance);
     }
     function withdrawSomeTokens(address tokenAddress, uint tokens) public onlyOwner returns (bool success) {
+        require(now > lockedTo);
         return ERC20Interface(tokenAddress).transfer(owner, tokens);
     }
     function withdrawTokens(address tokenAddress) public onlyOwner returns (bool success) {
+        require(now > lockedTo);
         uint balance = ERC20Interface(tokenAddress).balanceOf(this);
         return ERC20Interface(tokenAddress).transfer(owner, balance);
     }

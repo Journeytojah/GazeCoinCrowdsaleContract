@@ -16,8 +16,8 @@ TOKENFACTORYSOL=`grep ^TOKENFACTORYSOL= settings.txt | sed "s/^.*=//"`
 TOKENFACTORYJS=`grep ^TOKENFACTORYJS= settings.txt | sed "s/^.*=//"`
 CROWDSALESOL=`grep ^CROWDSALESOL= settings.txt | sed "s/^.*=//"`
 CROWDSALEJS=`grep ^CROWDSALEJS= settings.txt | sed "s/^.*=//"`
-BOUNTYLISTSOL=`grep ^BOUNTYLISTSOL= settings.txt | sed "s/^.*=//"`
-BOUNTYLISTJS=`grep ^BOUNTYLISTJS= settings.txt | sed "s/^.*=//"`
+BONUSLISTSOL=`grep ^BONUSLISTSOL= settings.txt | sed "s/^.*=//"`
+BONUSLISTJS=`grep ^BONUSLISTJS= settings.txt | sed "s/^.*=//"`
 LOCKEDWALLETSOL=`grep ^LOCKEDWALLETSOL= settings.txt | sed "s/^.*=//"`
 LOCKEDWALLETJS=`grep ^LOCKEDWALLETJS= settings.txt | sed "s/^.*=//"`
 
@@ -43,10 +43,10 @@ printf "TOKENFACTORYSOL    = '$TOKENFACTORYSOL'\n" | tee -a $TEST1OUTPUT
 printf "TOKENFACTORYJS     = '$TOKENFACTORYJS'\n" | tee -a $TEST1OUTPUT
 printf "CROWDSALESOL       = '$CROWDSALESOL'\n" | tee -a $TEST1OUTPUT
 printf "CROWDSALEJS        = '$CROWDSALEJS'\n" | tee -a $TEST1OUTPUT
-printf "BOUNTYLISTSOL       = '$BOUNTYLISTSOL'\n" | tee -a $TEST1OUTPUT
-printf "BOUNTYLISTJS        = '$BOUNTYLISTJS'\n" | tee -a $TEST1OUTPUT
-printf "LOCKEDWALLETSOL       = '$LOCKEDWALLETSOL'\n" | tee -a $TEST1OUTPUT
-printf "LOCKEDWALLETJS        = '$LOCKEDWALLETJS'\n" | tee -a $TEST1OUTPUT
+printf "BONUSLISTSOL       = '$BONUSLISTSOL'\n" | tee -a $TEST1OUTPUT
+printf "BONUSLISTJS        = '$BONUSLISTJS'\n" | tee -a $TEST1OUTPUT
+printf "LOCKEDWALLETSOL    = '$LOCKEDWALLETSOL'\n" | tee -a $TEST1OUTPUT
+printf "LOCKEDWALLETJS     = '$LOCKEDWALLETJS'\n" | tee -a $TEST1OUTPUT
 printf "DEPLOYMENTDATA     = '$DEPLOYMENTDATA'\n" | tee -a $TEST1OUTPUT
 printf "INCLUDEJS          = '$INCLUDEJS'\n" | tee -a $TEST1OUTPUT
 printf "TEST1OUTPUT        = '$TEST1OUTPUT'\n" | tee -a $TEST1OUTPUT
@@ -59,7 +59,7 @@ printf "END_DATE           = '$END_DATE' '$END_DATE_S'\n" | tee -a $TEST1OUTPUT
 # `cp modifiedContracts/SnipCoin.sol .`
 `cp $SOURCEDIR/$TOKENFACTORYSOL .`
 `cp $SOURCEDIR/$CROWDSALESOL .`
-`cp $SOURCEDIR/$BOUNTYLISTSOL .`
+`cp $SOURCEDIR/$BONUSLISTSOL .`
 `cp $SOURCEDIR/$LOCKEDWALLETSOL .`
 
 # --- Modify parameters ---
@@ -74,8 +74,8 @@ DIFFS1=`diff $SOURCEDIR/$CROWDSALESOL $CROWDSALESOL`
 echo "--- Differences $SOURCEDIR/$CROWDSALESOL $CROWDSALESOL ---" | tee -a $TEST1OUTPUT
 echo "$DIFFS1" | tee -a $TEST1OUTPUT
 
-DIFFS1=`diff $SOURCEDIR/$BOUNTYLISTSOL $BOUNTYLISTSOL`
-echo "--- Differences $SOURCEDIR/$BOUNTYLISTSOL $BOUNTYLISTSOL ---" | tee -a $TEST1OUTPUT
+DIFFS1=`diff $SOURCEDIR/$BONUSLISTSOL $BONUSLISTSOL`
+echo "--- Differences $SOURCEDIR/$BONUSLISTSOL $BONUSLISTSOL ---" | tee -a $TEST1OUTPUT
 echo "$DIFFS1" | tee -a $TEST1OUTPUT
 
 DIFFS1=`diff $SOURCEDIR/$LOCKEDWALLETSOL $LOCKEDWALLETSOL`
@@ -86,14 +86,14 @@ solc_0.4.18 --version | tee -a $TEST1OUTPUT
 
 echo "var tokenFactoryOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $TOKENFACTORYSOL`;" > $TOKENFACTORYJS
 echo "var crowdsaleOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $CROWDSALESOL`;" > $CROWDSALEJS
-echo "var bountyListOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $BOUNTYLISTSOL`;" > $BOUNTYLISTJS
+echo "var bonusListOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $BONUSLISTSOL`;" > $BONUSLISTJS
 echo "var lockedWalletOutput=`solc_0.4.18 --optimize --pretty-json --combined-json abi,bin,interface $LOCKEDWALLETSOL`;" > $LOCKEDWALLETJS
 
 
 geth --verbosity 3 attach $GETHATTACHPOINT << EOF | tee -a $TEST1OUTPUT
 loadScript("$TOKENFACTORYJS");
 loadScript("$CROWDSALEJS");
-loadScript("$BOUNTYLISTJS");
+loadScript("$BONUSLISTJS");
 loadScript("$LOCKEDWALLETJS");
 loadScript("functions.js");
 
@@ -104,8 +104,8 @@ var tokenFactoryBin = "0x" + tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTS
 var tokenAbi = JSON.parse(tokenFactoryOutput.contracts["$TOKENFACTORYSOL:BTTSToken"].abi);
 var crowdsaleAbi = JSON.parse(crowdsaleOutput.contracts["$CROWDSALESOL:GazeCoinCrowdsale"].abi);
 var crowdsaleBin = "0x" + crowdsaleOutput.contracts["$CROWDSALESOL:GazeCoinCrowdsale"].bin;
-var bountyListAbi = JSON.parse(bountyListOutput.contracts["$BOUNTYLISTSOL:GazeCoinBountyList"].abi);
-var bountyListBin = "0x" + bountyListOutput.contracts["$BOUNTYLISTSOL:GazeCoinBountyList"].bin;
+var bonusListAbi = JSON.parse(bonusListOutput.contracts["$BONUSLISTSOL:GazeCoinBonusList"].abi);
+var bonusListBin = "0x" + bonusListOutput.contracts["$BONUSLISTSOL:GazeCoinBonusList"].bin;
 var lockedWalletAbi = JSON.parse(lockedWalletOutput.contracts["$LOCKEDWALLETSOL:GazeCoinLockedWallet"].abi);
 var lockedWalletBin = "0x" + lockedWalletOutput.contracts["$LOCKEDWALLETSOL:GazeCoinLockedWallet"].bin;
 
@@ -116,8 +116,8 @@ var lockedWalletBin = "0x" + lockedWalletOutput.contracts["$LOCKEDWALLETSOL:Gaze
 // console.log("DATA: tokenAbi=" + JSON.stringify(tokenAbi));
 // console.log("DATA: crowdsaleAbi=" + JSON.stringify(crowdsaleAbi));
 // console.log("DATA: crowdsaleBin=" + JSON.stringify(crowdsaleBin));
-// console.log("DATA: bountyListAbi=" + JSON.stringify(bountyListAbi));
-// console.log("DATA: bountyListBin=" + JSON.stringify(bountyListBin));
+// console.log("DATA: bonusListAbi=" + JSON.stringify(bonusListAbi));
+// console.log("DATA: bonusListBin=" + JSON.stringify(bonusListBin));
 // console.log("DATA: lockedWalletAbi=" + JSON.stringify(lockedWalletAbi));
 // console.log("DATA: lockedWalletBin=" + JSON.stringify(lockedWalletBin));
 
@@ -255,7 +255,7 @@ console.log("RESULT: ");
 
 // -----------------------------------------------------------------------------
 var crowdsaleMessage = "Deploy GazeCoin Crowdsale Contract";
-var bountyListMessage = "Deploy Bounty List Contract";
+var bonusListMessage = "Deploy Bonus List Contract";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + crowdsaleMessage);
 var crowdsaleContract = web3.eth.contract(crowdsaleAbi);
@@ -276,21 +276,21 @@ var crowdsale = crowdsaleContract.new(wallet, lockedWalletAddress, {from: contra
     }
   }
 );
-console.log("RESULT: " + bountyListMessage);
-var bountyListContract = web3.eth.contract(bountyListAbi);
-// console.log(JSON.stringify(bountyListContract));
-var bountyListTx = null;
-var bountyListAddress = null;
-var bountyList = bountyListContract.new({from: contractOwnerAccount, data: bountyListBin, gas: 6000000, gasPrice: defaultGasPrice},
+console.log("RESULT: " + bonusListMessage);
+var bonusListContract = web3.eth.contract(bonusListAbi);
+// console.log(JSON.stringify(bonusListContract));
+var bonusListTx = null;
+var bonusListAddress = null;
+var bonusList = bonusListContract.new({from: contractOwnerAccount, data: bonusListBin, gas: 6000000, gasPrice: defaultGasPrice},
   function(e, contract) {
     if (!e) {
       if (!contract.address) {
-        bountyListTx = contract.transactionHash;
+        bonusListTx = contract.transactionHash;
       } else {
-        bountyListAddress = contract.address;
-        addAccount(bountyListAddress, "Bounty List");
-        addBountyListContractAddressAndAbi(bountyListAddress, bountyListAbi);
-        console.log("DATA: bountyListAddress=" + bountyListAddress);
+        bonusListAddress = contract.address;
+        addAccount(bonusListAddress, "Bonus List");
+        addBonusListContractAddressAndAbi(bonusListAddress, bonusListAbi);
+        console.log("DATA: bonusListAddress=" + bonusListAddress);
       }
     }
   }
@@ -299,11 +299,11 @@ while (txpool.status.pending > 0) {
 }
 printBalances();
 failIfTxStatusError(crowdsaleTx, crowdsaleMessage);
-failIfTxStatusError(bountyListTx, bountyListMessage);
+failIfTxStatusError(bonusListTx, bonusListMessage);
 printTxData("crowdsaleAddress=" + crowdsaleAddress, crowdsaleTx);
-printTxData("bountyListAddress=" + bountyListAddress, bountyListTx);
+printTxData("bonusListAddress=" + bonusListAddress, bonusListTx);
 printCrowdsaleContractDetails();
-printBountyListContractDetails();
+printBonusListContractDetails();
 console.log("RESULT: ");
 
 
@@ -312,22 +312,25 @@ var setup_Message = "Setup";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + setup_Message);
 var setup_1Tx = crowdsale.setBTTSToken(tokenAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-var setup_2Tx = crowdsale.setBountyList(bountyListAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_2Tx = crowdsale.setBonusList(bonusListAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 var setup_3Tx = token.setMinter(crowdsaleAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-var setup_4Tx = bountyList.enable([account4], {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_4Tx = bonusList.add([account4], 1, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_5Tx = bonusList.add([account5], 2, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
 printBalances();
 failIfTxStatusError(setup_1Tx, setup_Message + " - crowdsale.setBTTSToken(tokenAddress)");
-failIfTxStatusError(setup_2Tx, setup_Message + " - crowdsale.setBountyList(bountyListAddress)");
+failIfTxStatusError(setup_2Tx, setup_Message + " - crowdsale.setBonusList(bonusListAddress)");
 failIfTxStatusError(setup_3Tx, setup_Message + " - token.setMinter(crowdsaleAddress)");
-failIfTxStatusError(setup_4Tx, setup_Message + " - bountyList.enable([account4])");
+failIfTxStatusError(setup_4Tx, setup_Message + " - bonusList.add([account4], 1)");
+failIfTxStatusError(setup_5Tx, setup_Message + " - bonusList.add([account5], 2)");
 printTxData("setup_1Tx", setup_1Tx);
 printTxData("setup_2Tx", setup_2Tx);
 printTxData("setup_3Tx", setup_3Tx);
 printTxData("setup_4Tx", setup_4Tx);
+printTxData("setup_5Tx", setup_5Tx);
 printCrowdsaleContractDetails();
-printBountyListContractDetails();
+printBonusListContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");
 
@@ -356,11 +359,13 @@ var sendContribution1Message = "Send Contribution #1";
 console.log("RESULT: " + sendContribution1Message);
 var sendContribution1_1Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
 var sendContribution1_2Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
+var sendContribution1_3Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
 while (txpool.status.pending > 0) {
 }
 printBalances();
-failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac4 100 ETH - BountyList 20%");
-failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac5 100 ETH - No BountyList entry");
+failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac4 100 ETH - Bonus Tier 1 20%");
+failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac5 100 ETH - Bonus Tier 2 15%");
+failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac6 100 ETH - No Bonus");
 printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
 printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
 printCrowdsaleContractDetails();

@@ -12,9 +12,9 @@ addAccount(eth.accounts[0], "Account #0 - Miner");
 addAccount(eth.accounts[1], "Account #1 - Contract Owner");
 addAccount(eth.accounts[2], "Account #2 - Wallet");
 addAccount(eth.accounts[3], "Account #3 - Team Wallet");
-addAccount(eth.accounts[4], "Account #4 - Bounty List");
-addAccount(eth.accounts[5], "Account #5");
-addAccount(eth.accounts[6], "Account #6");
+addAccount(eth.accounts[4], "Account #4 - Bonus Tier 1 20%");
+addAccount(eth.accounts[5], "Account #5 - Bonus Tier 2 15%");
+addAccount(eth.accounts[6], "Account #6 - No Bonus");
 addAccount(eth.accounts[7], "Account #7");
 addAccount(eth.accounts[8], "Account #8");
 addAccount(eth.accounts[9], "Account #9");
@@ -344,15 +344,17 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.contributedUsd=" + contract.contributedUsd());
     console.log("RESULT: crowdsale.generatedGze=" + contract.generatedGze() + " " + contract.generatedGze().shift(-18) + " GZE");
     console.log("RESULT: crowdsale.bttsToken=" + contract.bttsToken());
-    console.log("RESULT: crowdsale.bountyList=" + contract.bountyList());
+    console.log("RESULT: crowdsale.bonusList=" + contract.bonusList());
     console.log("RESULT: crowdsale.usdCentPerGze=" + contract.usdCentPerGze());
-    console.log("RESULT: crowdsale.bountyListBonusPercent=" + contract.bountyListBonusPercent());
     console.log("RESULT: crowdsale.ethCap=" + contract.ethCap() + " " + contract.ethCap().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.lockedWalletEthThreshold=" + contract.lockedWalletEthThreshold() + " " + contract.lockedWalletEthThreshold().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.TEAM=" + contract.TEAM());
     console.log("RESULT: crowdsale.TEAM_PERCENT=" + contract.TEAM_PERCENT());
     var oneEther = web3.toWei(1, "ether");
+    console.log("RESULT: crowdsale.TIER1_BONUS=" + contract.TIER1_BONUS());
+    console.log("RESULT: crowdsale.TIER2_BONUS=" + contract.TIER2_BONUS());
     console.log("RESULT: crowdsale.gzeFromEth(1 ether, 0%)=" + contract.gzeFromEth(oneEther, 0) + " " + contract.gzeFromEth(oneEther, 0).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 15%)=" + contract.gzeFromEth(oneEther, 15) + " " + contract.gzeFromEth(oneEther, 15).shift(-18) + " GZE");
     console.log("RESULT: crowdsale.gzeFromEth(1 ether, 20%)=" + contract.gzeFromEth(oneEther, 20) + " " + contract.gzeFromEth(oneEther, 20).shift(-18) + " GZE");
     console.log("RESULT: crowdsale.gzePerEth()=" + contract.gzePerEth() + " " + contract.gzePerEth().shift(-18) + " GZE");
 
@@ -380,12 +382,12 @@ function printCrowdsaleContractDetails() {
     });
     bttsTokenUpdatedEvents.stopWatching();
 
-    var bountyListUpdatedEvents = contract.BountyListUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    var bonusListUpdatedEvents = contract.BonusListUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
-    bountyListUpdatedEvents.watch(function (error, result) {
-      console.log("RESULT: BountyListUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    bonusListUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: BonusListUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
-    bountyListUpdatedEvents.stopWatching();
+    bonusListUpdatedEvents.stopWatching();
 
     var contributedEvents = contract.Contributed({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
@@ -462,57 +464,57 @@ function printTokenFactoryContractDetails() {
 
 
 // -----------------------------------------------------------------------------
-// BountyList Contract
+// BonusList Contract
 // -----------------------------------------------------------------------------
-var bountyListContractAddress = null;
-var bountyListContractAbi = null;
+var bonusListContractAddress = null;
+var bonusListContractAbi = null;
 
-function addBountyListContractAddressAndAbi(address, bountyListAbi) {
-  bountyListContractAddress = address;
-  bountyListContractAbi = bountyListAbi;
+function addBonusListContractAddressAndAbi(address, bonusListAbi) {
+  bonusListContractAddress = address;
+  bonusListContractAbi = bonusListAbi;
 }
 
-var bountyListFromBlock = 0;
-function printBountyListContractDetails() {
-  console.log("RESULT: bountyListContractAddress=" + bountyListContractAddress);
-  if (bountyListContractAddress != null && bountyListContractAbi != null) {
-    var contract = eth.contract(bountyListContractAbi).at(bountyListContractAddress);
-    console.log("RESULT: bountyList.owner=" + contract.owner());
-    console.log("RESULT: bountyList.newOwner=" + contract.newOwner());
-    console.log("RESULT: bountyList.sealed=" + contract.sealed());
+var bonusListFromBlock = 0;
+function printBonusListContractDetails() {
+  console.log("RESULT: bonusListContractAddress=" + bonusListContractAddress);
+  if (bonusListContractAddress != null && bonusListContractAbi != null) {
+    var contract = eth.contract(bonusListContractAbi).at(bonusListContractAddress);
+    console.log("RESULT: bonusList.owner=" + contract.owner());
+    console.log("RESULT: bonusList.newOwner=" + contract.newOwner());
+    console.log("RESULT: bonusList.sealed=" + contract.sealed());
 
     var latestBlock = eth.blockNumber;
     var i;
 
-    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
     i = 0;
     ownershipTransferredEvents.watch(function (error, result) {
       console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     ownershipTransferredEvents.stopWatching();
 
-    var adminAddedEvents = contract.AdminAdded({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    var adminAddedEvents = contract.AdminAdded({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
     i = 0;
     adminAddedEvents.watch(function (error, result) {
       console.log("RESULT: AdminAdded " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     adminAddedEvents.stopWatching();
 
-    var adminRemovedEvents = contract.AdminRemoved({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    var adminRemovedEvents = contract.AdminRemoved({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
     i = 0;
     adminRemovedEvents.watch(function (error, result) {
       console.log("RESULT: AdminRemoved " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     adminRemovedEvents.stopWatching();
 
-    var addressListedEvents = contract.AddressListed({}, { fromBlock: bountyListFromBlock, toBlock: latestBlock });
+    var addressListedEvents = contract.AddressListed({}, { fromBlock: bonusListFromBlock, toBlock: latestBlock });
     i = 0;
     addressListedEvents.watch(function (error, result) {
       console.log("RESULT: AddressListed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     addressListedEvents.stopWatching();
 
-    bountyListFromBlock = latestBlock + 1;
+    bonusListFromBlock = latestBlock + 1;
   }
 }
 
