@@ -179,12 +179,12 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     // Start 11 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-10T16:00:00").getTime()/1000 => 1512921600
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public START_DATE = 1512555971; // Wed  6 Dec 2017 10:26:11 UTC
+    uint public START_DATE = 1512660590; // Thu  7 Dec 2017 15:29:50 UTC
 
     // End 21 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
     // new Date("2017-12-21T16:00:00").getTime()/1000 => 1513872000
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public END_DATE = 1512556121; // Wed  6 Dec 2017 10:26:11 UTC
+    uint public END_DATE = 1512660740; // Thu  7 Dec 2017 15:29:50 UTC
 
     uint public ethMinContribution = 0.01 ether;
 

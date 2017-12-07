@@ -370,6 +370,7 @@ printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
 printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
+printLockedWalletContractDetails();
 console.log("RESULT: ");
 
 
@@ -390,6 +391,7 @@ printTxData("sendContribution2_1Tx", sendContribution2_1Tx);
 printTxData("sendContribution2_2Tx", sendContribution2_2Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
+printLockedWalletContractDetails();
 console.log("RESULT: ");
 
 

@@ -50,16 +50,18 @@ contract Owned {
 // Locked Wallet
 // ----------------------------------------------------------------------------
 contract GazeCoinLockedWallet is Owned {
-    uint public lockedPeriod = 6 * 30 days;
+    uint public LOCKED_PERIOD = 6 * 30 days;
     uint public lockedTo;
 
+    event EthersDeposited(address indexed addr, uint ethers);
     event EthersWithdrawn(address indexed addr, uint ethers);
     event TokensWithdrawn(address indexed addr, address indexed tokenAddress, uint tokens);
 
     function GazeCoinLockedWallet() public {
-        lockedTo = now + lockedPeriod;
+        lockedTo = now + LOCKED_PERIOD;
     }
     function () public payable {
+        EthersDeposited(msg.sender, msg.value);
     }
     function withdrawSome(uint ethers) public onlyOwner {
         require(now > lockedTo);
@@ -73,11 +75,13 @@ contract GazeCoinLockedWallet is Owned {
     }
     function withdrawSomeTokens(address tokenAddress, uint tokens) public onlyOwner returns (bool success) {
         require(now > lockedTo);
+        TokensWithdrawn(owner, tokenAddress, tokens);
         return ERC20Interface(tokenAddress).transfer(owner, tokens);
     }
     function withdrawTokens(address tokenAddress) public onlyOwner returns (bool success) {
         require(now > lockedTo);
         uint balance = ERC20Interface(tokenAddress).balanceOf(this);
+        TokensWithdrawn(owner, tokenAddress, balance);
         return ERC20Interface(tokenAddress).transfer(owner, balance);
     }
 }

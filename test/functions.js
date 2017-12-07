@@ -1,6 +1,6 @@
-// Nov 29 2017
-var ethPriceUSD = 469.82;
-var defaultGasPrice = web3.toWei(1, "gwei");
+// Dec 7 2017
+var ethPriceUSD = 418.52;
+var defaultGasPrice = web3.toWei(53, "gwei");
 
 // -----------------------------------------------------------------------------
 // Accounts
@@ -537,7 +537,7 @@ function printLockedWalletContractDetails() {
     var contract = eth.contract(lockedWalletContractAbi).at(lockedWalletContractAddress);
     console.log("RESULT: lockedWallet.owner=" + contract.owner());
     console.log("RESULT: lockedWallet.newOwner=" + contract.newOwner());
-    console.log("RESULT: lockedWallet.lockedPeriod=" + contract.lockedPeriod());
+    console.log("RESULT: lockedWallet.LOCKED_PERIOD=" + contract.LOCKED_PERIOD() + " " + (contract.LOCKED_PERIOD()/(60*60*24)) + " days");
     console.log("RESULT: crowdsale.lockedTo=" + contract.lockedTo() + " " + new Date(contract.lockedTo() * 1000).toUTCString());
 
     var latestBlock = eth.blockNumber;
@@ -549,6 +549,13 @@ function printLockedWalletContractDetails() {
       console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     ownershipTransferredEvents.stopWatching();
+
+    var ethersDepositedEvents = contract.EthersDeposited({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
+    i = 0;
+    ethersDepositedEvents.watch(function (error, result) {
+      console.log("RESULT: EthersDeposited " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    ethersDepositedEvents.stopWatching();
 
     var ethersWithdrawnEvents = contract.EthersWithdrawn({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
     i = 0;
