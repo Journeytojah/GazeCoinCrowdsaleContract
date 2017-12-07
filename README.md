@@ -33,6 +33,14 @@
 
 ## Code Review
 
+* [x] [code-review/GazeCoinBonusList.md](code-review/GazeCoinBonusList.md)
+  * [x] contract Owned
+  * [x] contract Admined is Owned
+  * [x] contract GazeCoinBonusList is Admined
+* [x] [code-review/GazeCoinLockedWallet.md](code-review/GazeCoinLockedWallet.md)
+  * [x] contract ERC20Interface
+  * [x] contract Owned
+  * [x] contract GazeCoinLockedWallet is Owned
 * [ ] [code-review/BTTSTokenFactory.md](code-review/BTTSTokenFactory.md)
   * [ ] contract ERC20Interface
   * [ ] contract ApproveAndCallFallBack
@@ -41,10 +49,6 @@
   * [ ] contract BTTSToken is BTTSTokenInterface
   * [ ] contract Owned
   * [ ] contract BTTSTokenFactory is Owned
-* [ ] [code-review/GazeCoinBonusList.md](code-review/GazeCoinBonusList.md)
-  * [ ] contract Owned
-  * [ ] contract Admined is Owned
-  * [ ] contract GazeCoinBonusList is Admined
 * [ ] [code-review/GazeCoinCrowdsale.md](code-review/GazeCoinCrowdsale.md)
   * [ ] contract ERC20Interface
   * [ ] contract ApproveAndCallFallBack
@@ -53,10 +57,6 @@
   * [ ] contract SafeMath
   * [ ] contract Owned
   * [ ] contract GazeCoinCrowdsale is SafeMath, Owned
-* [ ] [code-review/GazeCoinLockedWallet.md](code-review/GazeCoinLockedWallet.md)
-  * [ ] contract ERC20Interface
-  * [ ] contract Owned
-  * [ ] contract GazeCoinLockedWallet is Owned
 
 <br />
 
