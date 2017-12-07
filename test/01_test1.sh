@@ -30,7 +30,7 @@ TEST1RESULTS=`grep ^TEST1RESULTS= settings.txt | sed "s/^.*=//"`
 CURRENTTIME=`date +%s`
 CURRENTTIMES=`date -r $CURRENTTIME -u`
 
-START_DATE=`echo "$CURRENTTIME+90" | bc`
+START_DATE=`echo "$CURRENTTIME+60*2+30" | bc`
 START_DATE_S=`date -r $START_DATE -u`
 END_DATE=`echo "$CURRENTTIME+60*4" | bc`
 END_DATE_S=`date -r $END_DATE -u`
@@ -396,15 +396,15 @@ console.log("RESULT: ");
 
 
 // -----------------------------------------------------------------------------
-var addPrecommitmentFloor_Message = "Add Precommitment Floor";
+var addPrecommitmentAdjustment_Message = "Add Precommitment Adjustment";
 // -----------------------------------------------------------------------------
-console.log("RESULT: " + addPrecommitmentFloor_Message);
-var addPrecommitmentFloor_1Tx = crowdsale.addPrecommitmentFloor(account8, new BigNumber("111").shift(18), {from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
+console.log("RESULT: " + addPrecommitmentAdjustment_Message);
+var addPrecommitmentAdjustment_1Tx = crowdsale.addPrecommitmentAdjustment(account8, new BigNumber("111").shift(18), {from: contractOwnerAccount, gas: 1000000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
 printBalances();
-failIfTxStatusError(addPrecommitmentFloor_1Tx, addPrecommitmentFloor_Message);
-printTxData("addPrecommitmentFloor_1Tx", addPrecommitmentFloor_1Tx);
+failIfTxStatusError(addPrecommitmentAdjustment_1Tx, addPrecommitmentAdjustment_Message);
+printTxData("addPrecommitmentAdjustment_1Tx", addPrecommitmentAdjustment_1Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");

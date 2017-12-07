@@ -50,12 +50,11 @@
   * [ ] contract Owned
   * [ ] contract BTTSTokenFactory is Owned
 * [ ] [code-review/GazeCoinCrowdsale.md](code-review/GazeCoinCrowdsale.md)
-  * [ ] contract ERC20Interface
-  * [ ] contract ApproveAndCallFallBack
-  * [ ] contract BTTSTokenInterface is ERC20Interface
-  * [ ] contract BonusListInterface
-  * [ ] contract SafeMath
-  * [ ] contract Owned
+  * [x] contract ERC20Interface
+  * [x] contract BTTSTokenInterface is ERC20Interface
+  * [x] contract BonusListInterface
+  * [x] contract SafeMath
+  * [x] contract Owned
   * [ ] contract GazeCoinCrowdsale is SafeMath, Owned
 
 <br />

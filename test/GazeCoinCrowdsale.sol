@@ -33,14 +33,6 @@ contract ERC20Interface {
 
 
 // ----------------------------------------------------------------------------
-// Contracts that can have tokens approved, and then a function execute
-// ----------------------------------------------------------------------------
-contract ApproveAndCallFallBack {
-    function receiveApproval(address from, uint256 tokens, address token, bytes data) public;
-}
-
-
-// ----------------------------------------------------------------------------
 // BokkyPooBah's Token Teleportation Service Interface v1.00
 //
 // Enjoy. (c) BokkyPooBah / Bok Consulting Pty Ltd 2017. The MIT Licence.
@@ -170,99 +162,87 @@ contract Owned {
 // ----------------------------------------------------------------------------
 contract GazeCoinCrowdsale is SafeMath, Owned {
 
+    BTTSTokenInterface public bttsToken;
+
+    BonusListInterface public bonusList;
+    uint public TIER1_BONUS = 20;
+    uint public TIER2_BONUS = 15;
+
     address public wallet;
     address public lockedWallet;
     uint public lockedWalletUsdThreshold = 2000000;
 
-    // https://www.worldtimebuddy.com/?qm=1&lid=5,100,2147714&h=5&date=2017-12-11&sln=11-11.5
-
     // Start 11 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
-    // new Date("2017-12-10T16:00:00").getTime()/1000 => 1512921600
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public START_DATE = 1512660590; // Thu  7 Dec 2017 15:29:50 UTC
-
+    uint public START_DATE = 1512668285; // Thu  7 Dec 2017 17:38:05 UTC
     // End 21 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
-    // new Date("2017-12-21T16:00:00").getTime()/1000 => 1513872000
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public END_DATE = 1512660740; // Thu  7 Dec 2017 15:29:50 UTC
+    uint public END_DATE = 1512668375; // Thu  7 Dec 2017 17:38:05 UTC
 
-    uint public ethMinContribution = 0.01 ether;
-
-    uint public usdCap = 35000000;
+    uint public MIN_CONTRIBUTION_ETH = 0.01 ether;
+    uint public CAP_USD = 35000000;
     // 05/12/2017 ETH/USD = 462.91
     uint public usdPerKEther = 462910;
-    //  AUD 10,000 = ~ USD 7,600
-    uint public lockedAccountUsdThreshold = 7600;
+    uint public USD_CENT_PER_GZE = 35;
+
     uint public contributedEth;
     uint public contributedUsd;
     uint public generatedGze;
-    BTTSTokenInterface public bttsToken;
-    BonusListInterface public bonusList;
 
-    uint public usdCentPerGze = 35;
-
-    uint public TIER1_BONUS = 20;
-    uint public TIER2_BONUS = 15;
-    bool public finalised;
+    //  AUD 10,000 = ~ USD 7,600
+    uint public lockedAccountThresholdUsd = 7600;
 
     address public TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
     uint public TEAM_PERCENT = 30;
 
-    event LockedAccountUsdThresholdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
+    bool public precommitmentAdjusted;
+    bool public finalised;
+
     event BTTSTokenUpdated(address indexed oldBTTSToken, address indexed newBTTSToken);
     event BonusListUpdated(address indexed oldBonusList, address indexed newBonusList);
+    event LockedAccountThresholdUsdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
     event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
     function GazeCoinCrowdsale(address _wallet, address _lockedWallet) public {
         wallet = _wallet;
         lockedWallet = _lockedWallet;
     }
-
-    function setLockedAccountUsdThreshold(uint _lockedAccountUsdThreshold) public onlyOwner {
-        // TODO require(now <= START_DATE);
-        LockedAccountUsdThresholdUpdated(lockedAccountUsdThreshold, _lockedAccountUsdThreshold);
-        lockedAccountUsdThreshold = _lockedAccountUsdThreshold;
-    }
     function setBTTSToken(address _bttsToken) public onlyOwner {
-        // TODO require(now <= START_DATE);
+        require(now <= START_DATE);
         BTTSTokenUpdated(address(bttsToken), _bttsToken);
         bttsToken = BTTSTokenInterface(_bttsToken);
     }
     function setBonusList(address _bonusList) public onlyOwner {
-        // TODO require(now <= START_DATE);
+        require(now <= START_DATE);
         BonusListUpdated(address(bonusList), _bonusList);
         bonusList = BonusListInterface(_bonusList);
     }
-
-    function ethCap() public view returns (uint) {
-        return usdCap * 10**uint(3 + 18) / usdPerKEther;
+    function setLockedAccountThresholdUsd(uint _lockedAccountThresholdUsd) public onlyOwner {
+        require(now <= START_DATE);
+        LockedAccountThresholdUsdUpdated(lockedAccountThresholdUsd, _lockedAccountThresholdUsd);
+        lockedAccountThresholdUsd = _lockedAccountThresholdUsd;
     }
 
-    function lockedWalletEthThreshold() public view returns (uint) {
-        return lockedWalletUsdThreshold * 10**uint(3 + 18) / usdPerKEther;
+    function capEth() public view returns (uint) {
+        return CAP_USD * 10**uint(3 + 18) / usdPerKEther;
     }
-
-    function lockedAccountEthThreshold() public view returns (uint) {
-        return lockedAccountUsdThreshold * 10**uint(3 + 18) / usdPerKEther;
-    }
-
     function gzeFromEth(uint ethAmount, uint bonusPercent) public view returns (uint) {
-        return usdPerKEther * ethAmount * (100 + bonusPercent) / 10**uint(3 + 2 - 2) / usdCentPerGze;
+        return usdPerKEther * ethAmount * (100 + bonusPercent) / 10**uint(3 + 2 - 2) / USD_CENT_PER_GZE;
     }
-
     function gzePerEth() public view returns (uint) {
         return gzeFromEth(10**18, 0);
     }
-
-    // 1GZE = US$0.35 = 0.35 / 444.050 ETH = 0.00078819952708 ETH
-    // 1ETH = 444.05 / 0.35 GZE = 1268.714285714285714
-    // gzePerKUsd = 1000 / 0.35 = 2857.142857142857143
-    // gzePerKEth = usdPerKEther / 0.35 = 12687142.857142857142857
+    function lockedWalletThresholdEth() public view returns (uint) {
+        return lockedWalletUsdThreshold * 10**uint(3 + 18) / usdPerKEther;
+    }
+    function lockedAccountThresholdEth() public view returns (uint) {
+        return lockedAccountThresholdUsd * 10**uint(3 + 18) / usdPerKEther;
+    }
 
     function () public payable {
         require(now >= START_DATE && now <= END_DATE);
-        require(contributedEth < ethCap());
-        require(msg.value >= ethMinContribution);
+        require(contributedEth < capEth());
+        require(msg.value >= MIN_CONTRIBUTION_ETH);
         uint tier = bonusList.bonusList(msg.sender);
         uint bonusPercent;
         if (tier == 1) {
@@ -274,17 +254,17 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         }
         uint ethAmount = msg.value;
         uint ethRefund = 0;
-        if (safeAdd(contributedEth, ethAmount) > ethCap()) {
-            ethAmount = safeSub(ethCap(), contributedEth);
+        if (safeAdd(contributedEth, ethAmount) > capEth()) {
+            ethAmount = safeSub(capEth(), contributedEth);
             ethRefund = safeSub(msg.value, ethAmount);
         }
         uint walletEth;
         uint lockedWalletEth;
-        if (contributedEth > lockedWalletEthThreshold()) {
+        if (contributedEth > lockedWalletThresholdEth()) {
             walletEth = 0;
             lockedWalletEth = ethAmount;
-        } else if (safeAdd(contributedEth, ethAmount) > lockedWalletEthThreshold()) {
-            lockedWalletEth = safeSub(safeAdd(contributedEth, ethAmount), lockedWalletEthThreshold());
+        } else if (safeAdd(contributedEth, ethAmount) > lockedWalletThresholdEth()) {
+            lockedWalletEth = safeSub(safeAdd(contributedEth, ethAmount), lockedWalletThresholdEth());
             walletEth = ethAmount - lockedWalletEth;
         } else {
             walletEth = ethAmount;
@@ -295,7 +275,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         generatedGze = safeAdd(generatedGze, gzeAmount);
         contributedEth = safeAdd(contributedEth, ethAmount);
         contributedUsd = safeAdd(contributedUsd, usdAmount);
-        bool lockAccount = ethAmount > lockedAccountEthThreshold();
+        bool lockAccount = ethAmount > lockedAccountThresholdEth();
         bttsToken.mint(msg.sender, gzeAmount, lockAccount);
         if (walletEth > 0) {
             wallet.transfer(walletEth);
@@ -310,7 +290,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function addPrecommitment(address tokenOwner, uint ethAmount, uint bonusPercent) public onlyOwner {
-        // TODO require(now < START_DATE);
+        require(now < START_DATE);
         require(!finalised);
         uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
@@ -322,9 +302,8 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
         Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
-
-    function addPrecommitmentFloor(address tokenOwner, uint gzeAmount) public onlyOwner {
-        // TODO require(now > END_DATE);
+    function addPrecommitmentAdjustment(address tokenOwner, uint gzeAmount) public onlyOwner {
+        require(now > END_DATE || contributedEth >= capEth());
         require(!finalised);
         uint ethAmount = 0;
         uint usdAmount = 0;
@@ -332,9 +311,9 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         generatedGze = safeAdd(generatedGze, gzeAmount);
         bool lockAccount = false;
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
+        precommitmentAdjusted = true;
         Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
-
     function roundUp(uint a) public pure returns (uint) {
         uint multiple = 10**18;
         uint remainder = a % multiple;
@@ -342,25 +321,21 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
             return safeSub(safeAdd(a, multiple), remainder);
         }
     }
-
     function finalise() public onlyOwner {
         require(!finalised);
+        require(precommitmentAdjusted);
+        require(now > END_DATE || contributedEth >= capEth());
         uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, TEAM_PERCENT));
         uint amountTeam = safeDiv(safeMul(total, TEAM_PERCENT), 100);
         generatedGze = safeAdd(generatedGze, amountTeam);
         bttsToken.mint(TEAM, amountTeam, false);
-
-        // Round up
         uint rounded = roundUp(generatedGze);
         if (rounded > generatedGze) {
             uint dust = safeSub(rounded, generatedGze);
             generatedGze = safeAdd(generatedGze, dust);
             bttsToken.mint(wallet, dust, false);
         }
-        if (contributedEth >= ethCap()) {
-            // closed = true;
-            bttsToken.disableMinting();
-        }
+        bttsToken.disableMinting();
         finalised = true;
     }
 }
