@@ -1,7 +1,5 @@
 pragma solidity ^0.4.18;
 
-// import "./BTTSTokenFactory.sol";
-
 // ----------------------------------------------------------------------------
 // GazeCoin Crowdsale Contract
 //
@@ -172,18 +170,18 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     address public lockedWallet;
     uint public lockedWalletUsdThreshold = 2000000;
 
-    // Start 11 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
+    // Start 10 Dec 2017 11:00 EST => 10 Dec 2017 16:00 UTC => 11 Dec 2017 03:00 AEST => 1512921600
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public START_DATE = 1512668285; // Thu  7 Dec 2017 17:38:05 UTC
-    // End 21 Dec 2017 11:00 EST. EST is 5 hours behind UTC, so 16:00 UTC
+    uint public constant START_DATE = 1512751099; // Fri  8 Dec 2017 16:38:19 UTC
+    // End 21 Dec 2017 11:00 EST => 21 Dec 2017 16:00 UTC => 12 Dec 2017 03:00 AEST => 1513872000
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public END_DATE = 1512668375; // Thu  7 Dec 2017 17:38:05 UTC
+    uint public endDate = 1512751189; // Fri  8 Dec 2017 16:39:49 UTC
 
-    uint public MIN_CONTRIBUTION_ETH = 0.01 ether;
-    uint public CAP_USD = 35000000;
-    // 05/12/2017 ETH/USD = 462.91
-    uint public usdPerKEther = 462910;
-    uint public USD_CENT_PER_GZE = 35;
+    uint public constant MIN_CONTRIBUTION_ETH = 0.01 ether;
+    uint public constant CAP_USD = 35000000;
+    // ETH/USD 8 Dec 2017 11:00 EST => 8 Dec 2017 16:00 UTC => 9 Dec 2017 03:00 AEST => 453.55 from CMC
+    uint public usdPerKEther = 453550;
+    uint public constant USD_CENT_PER_GZE = 35;
 
     uint public contributedEth;
     uint public contributedUsd;
@@ -192,8 +190,8 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     //  AUD 10,000 = ~ USD 7,600
     uint public lockedAccountThresholdUsd = 7600;
 
-    address public TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
-    uint public TEAM_PERCENT = 30;
+    address public constant TEAM = 0xa33a6c312D9aD0E0F2E95541BeED0Cc081621fd0;
+    uint public constant TEAM_PERCENT = 30;
 
     bool public precommitmentAdjusted;
     bool public finalised;
@@ -201,6 +199,8 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     event BTTSTokenUpdated(address indexed oldBTTSToken, address indexed newBTTSToken);
     event BonusListUpdated(address indexed oldBonusList, address indexed newBonusList);
     event LockedAccountThresholdUsdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
+    event EndDateUpdated(uint oldEndDate, uint newEndDate);
+    event UsdPerKEtherUpdated(uint oldUsdPerKEther, uint newUsdPerKEther);
     event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
     function GazeCoinCrowdsale(address _wallet, address _lockedWallet) public {
@@ -222,6 +222,16 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         LockedAccountThresholdUsdUpdated(lockedAccountThresholdUsd, _lockedAccountThresholdUsd);
         lockedAccountThresholdUsd = _lockedAccountThresholdUsd;
     }
+    function setEndDate(uint _endDate) public onlyOwner {
+        require(_endDate >= now);
+        EndDateUpdated(endDate, _endDate);
+        endDate = _endDate;
+    }
+    function setUsdPerKEther(uint _usdPerKEther) public onlyOwner {
+        require(now <= START_DATE);
+        UsdPerKEtherUpdated(usdPerKEther, _usdPerKEther);
+        usdPerKEther = _usdPerKEther;
+    }
 
     function capEth() public view returns (uint) {
         return CAP_USD * 10**uint(3 + 18) / usdPerKEther;
@@ -240,7 +250,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function () public payable {
-        require(now >= START_DATE && now <= END_DATE);
+        require(now >= START_DATE && now <= endDate);
         require(contributedEth < capEth());
         require(msg.value >= MIN_CONTRIBUTION_ETH);
         uint tier = bonusList.bonusList(msg.sender);
@@ -303,7 +313,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
     function addPrecommitmentAdjustment(address tokenOwner, uint gzeAmount) public onlyOwner {
-        require(now > END_DATE || contributedEth >= capEth());
+        require(now > endDate || contributedEth >= capEth());
         require(!finalised);
         uint ethAmount = 0;
         uint usdAmount = 0;
@@ -324,7 +334,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     function finalise() public onlyOwner {
         require(!finalised);
         require(precommitmentAdjusted);
-        require(now > END_DATE || contributedEth >= capEth());
+        require(now > endDate || contributedEth >= capEth());
         uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, TEAM_PERCENT));
         uint amountTeam = safeDiv(safeMul(total, TEAM_PERCENT), 100);
         generatedGze = safeAdd(generatedGze, amountTeam);

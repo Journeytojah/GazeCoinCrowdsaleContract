@@ -64,7 +64,7 @@ printf "END_DATE           = '$END_DATE' '$END_DATE_S'\n" | tee -a $TEST1OUTPUT
 
 # --- Modify parameters ---
 `perl -pi -e "s/START_DATE \= 1512921600;.*$/START_DATE \= $START_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
-`perl -pi -e "s/END_DATE \= 1513872000;.*$/END_DATE \= $END_DATE; \/\/ $START_DATE_S/" $CROWDSALESOL`
+`perl -pi -e "s/endDate \= 1513872000;.*$/endDate \= $END_DATE; \/\/ $END_DATE_S/" $CROWDSALESOL`
 
 DIFFS1=`diff $SOURCEDIR/$TOKENFACTORYSOL $TOKENFACTORYSOL`
 echo "--- Differences $SOURCEDIR/$TOKENFACTORYSOL $TOKENFACTORYSOL ---" | tee -a $TEST1OUTPUT
@@ -313,22 +313,25 @@ var setup_Message = "Setup";
 console.log("RESULT: " + setup_Message);
 var setup_1Tx = crowdsale.setBTTSToken(tokenAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 var setup_2Tx = crowdsale.setBonusList(bonusListAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-var setup_3Tx = token.setMinter(crowdsaleAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-var setup_4Tx = bonusList.add([account4], 1, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
-var setup_5Tx = bonusList.add([account5], 2, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_3Tx = crowdsale.setEndDate($END_DATE, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_4Tx = token.setMinter(crowdsaleAddress, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_5Tx = bonusList.add([account4], 1, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
+var setup_6Tx = bonusList.add([account5], 2, {from: contractOwnerAccount, gas: 100000, gasPrice: defaultGasPrice});
 while (txpool.status.pending > 0) {
 }
 printBalances();
 failIfTxStatusError(setup_1Tx, setup_Message + " - crowdsale.setBTTSToken(tokenAddress)");
 failIfTxStatusError(setup_2Tx, setup_Message + " - crowdsale.setBonusList(bonusListAddress)");
-failIfTxStatusError(setup_3Tx, setup_Message + " - token.setMinter(crowdsaleAddress)");
-failIfTxStatusError(setup_4Tx, setup_Message + " - bonusList.add([account4], 1)");
-failIfTxStatusError(setup_5Tx, setup_Message + " - bonusList.add([account5], 2)");
+failIfTxStatusError(setup_3Tx, setup_Message + " - crowdsale.setEndDate($END_DATE)");
+failIfTxStatusError(setup_4Tx, setup_Message + " - token.setMinter(crowdsaleAddress)");
+failIfTxStatusError(setup_5Tx, setup_Message + " - bonusList.add([account4], 1)");
+failIfTxStatusError(setup_6Tx, setup_Message + " - bonusList.add([account5], 2)");
 printTxData("setup_1Tx", setup_1Tx);
 printTxData("setup_2Tx", setup_2Tx);
 printTxData("setup_3Tx", setup_3Tx);
 printTxData("setup_4Tx", setup_4Tx);
 printTxData("setup_5Tx", setup_5Tx);
+printTxData("setup_6Tx", setup_6Tx);
 printCrowdsaleContractDetails();
 printBonusListContractDetails();
 printTokenContractDetails();

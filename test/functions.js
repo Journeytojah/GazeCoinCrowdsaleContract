@@ -1,6 +1,6 @@
-// Dec 7 2017
-var ethPriceUSD = 418.52;
-var defaultGasPrice = web3.toWei(53, "gwei");
+// ETH/USD 8 Dec 2017 11:00 EST => 8 Dec 2017 16:00 UTC => 9 Dec 2017 03:00 AEST => 453.55 from CMC
+var ethPriceUSD = 453.55;
+var defaultGasPrice = web3.toWei(50, "gwei");
 
 // -----------------------------------------------------------------------------
 // Accounts
@@ -339,7 +339,7 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.lockedWallet=" + contract.lockedWallet());
     console.log("RESULT: crowdsale.lockedWalletThresholdEth=" + contract.lockedWalletThresholdEth() + " " + contract.lockedWalletThresholdEth().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.START_DATE=" + contract.START_DATE() + " " + new Date(contract.START_DATE() * 1000).toUTCString());
-    console.log("RESULT: crowdsale.END_DATE=" + contract.END_DATE() + " " + new Date(contract.END_DATE() * 1000).toUTCString());
+    console.log("RESULT: crowdsale.endDate=" + contract.endDate() + " " + new Date(contract.endDate() * 1000).toUTCString());
     console.log("RESULT: crowdsale.MIN_CONTRIBUTION_ETH=" + contract.MIN_CONTRIBUTION_ETH() + " " + contract.MIN_CONTRIBUTION_ETH().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.CAP_USD=" + contract.CAP_USD());
     console.log("RESULT: crowdsale.capEth=" + contract.capEth() + " " + contract.capEth().shift(-18) + " ETH");
@@ -389,10 +389,28 @@ function printCrowdsaleContractDetails() {
     });
     lockedAccountThresholdUsdUpdatedEvents.stopWatching();
 
-     var contributedEvents = contract.Contributed({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    var endDateUpdatedEvents = contract.EndDateUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    lockedAccountThresholdUsdUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: EndDateUpdated " + i++ + " #" + result.blockNumber +
+        " oldEndDate=" + result.args.oldEndDate + " " + new Date(result.args.oldEndDate * 1000).toUTCString() +
+        " newEndDate=" + result.args.newEndDate + " " + new Date(result.args.newEndDate * 1000).toUTCString());
+    });
+    endDateUpdatedEvents.stopWatching();
+
+    var contributedEvents = contract.Contributed({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
     contributedEvents.watch(function (error, result) {
       console.log("RESULT: Contributed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+      console.log("RESULT: Contributed " + i++ + " #" + result.blockNumber + " addr=" + result.args.addr + 
+        " ethAmount=" + result.args.ethAmount + " " + result.args.ethAmount.shift(-18) + " ETH" +
+        " ethRefund=" + result.args.ethRefund + " " + result.args.ethRefund.shift(-18) + " ETH" +
+        " usdAmount=" + result.args.usdAmount + " USD" +
+        " gzeAmount=" + result.args.gzeAmount + " " + result.args.gzeAmount.shift(-18) + " GZE" +
+        " contributedEth=" + result.args.contributedEth + " " + result.args.contributedEth.shift(-18) + " ETH" +
+        " contributedUsd=" + result.args.contributedUsd + " USD" +
+        " generatedGze=" + result.args.generatedGze + " " + result.args.generatedGze.shift(-18) + " GZE" +
+        " lockAccount=" + result.args.lockAccount);
     });
     contributedEvents.stopWatching();
 
