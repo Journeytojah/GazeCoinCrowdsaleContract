@@ -20,6 +20,19 @@
 * Whitelisters receive 20% bonus
 * ICO runs from Dec 10-21 . Start times are 11am EST. 11am EST is 22:00 AEDT and 16:00 GMT.
 
+<br />
+
+<hr />
+
+## Deployment To Mainnet
+
+* Update [contracts/GazeCoinCrowdsale.sol](contracts/GazeCoinCrowdsale.sol)
+  * [ ] Update `usdPerKEther` to e.g. `453550` for 453.550 ETH/USD
+    * [ ] Check `gzeFromEth(...)` that the rate is sensible
+  * [ ] Update `wallet` and `TEAM` wallets
+  * [ ] Check `lockedAccountThresholdUsd` to e.g. `7500` for USD 7,500 AML/KYC limit
+* [ ] Send test transaction of 0.01 ETH from the contract owner account before start of crowdsale
+  * [ ] Check tokens and ETH flow into multisig.
 
 <br />
 

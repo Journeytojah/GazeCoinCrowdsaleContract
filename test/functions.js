@@ -10,22 +10,23 @@ var accountNames = {};
 
 addAccount(eth.accounts[0], "Account #0 - Miner");
 addAccount(eth.accounts[1], "Account #1 - Contract Owner");
-addAccount(eth.accounts[2], "Account #2 - Wallet");
-addAccount(eth.accounts[3], "Account #3 - Team Wallet");
-addAccount(eth.accounts[4], "Account #4 - Bonus Tier 1 20%");
-addAccount(eth.accounts[5], "Account #5 - Bonus Tier 2 15%");
+addAccount(eth.accounts[2], "Account #2");
+addAccount(eth.accounts[3], "Account #3 - Bonus Tier 1 50%");
+addAccount(eth.accounts[4], "Account #4 - Bonus Tier 2 20%");
+addAccount(eth.accounts[5], "Account #5 - Bonus Tier 3 15%");
 addAccount(eth.accounts[6], "Account #6 - No Bonus");
-addAccount(eth.accounts[7], "Account #7");
+addAccount(eth.accounts[7], "Account #7 - Precommitment + Adjustment");
 addAccount(eth.accounts[8], "Account #8");
 addAccount(eth.accounts[9], "Account #9");
 addAccount(eth.accounts[10], "Account #10");
 addAccount(eth.accounts[11], "Account #11");
-
+addAccount("0x8cD8baa410E9172b949f2c4433D3b5905F8606fF", "GazeCoin Multisig");
+addAccount("0xb4eC550893D31763C02EBDa44Dff90b7b5a62656", "GazeCoin Team Wallet");
 
 var minerAccount = eth.accounts[0];
 var contractOwnerAccount = eth.accounts[1];
-var wallet = eth.accounts[2];
-var teamWallet = eth.accounts[3];
+var teamWallet = eth.accounts[2];
+var account3 = eth.accounts[3];
 var account4 = eth.accounts[4];
 var account5 = eth.accounts[5];
 var account6 = eth.accounts[6];
@@ -213,10 +214,10 @@ function failIfGasEqualsGasUsedOrContractAddressNull(contractAddress, tx, msg) {
 function waitUntil(message, unixTime, addSeconds) {
   var t = parseInt(unixTime) + parseInt(addSeconds) + parseInt(1);
   var time = new Date(t * 1000);
-  console.log("RESULT: Waiting until '" + message + "' at " + unixTime + "+" + addSeconds + "s =" + time + " now=" + new Date());
+  console.log("RESULT: Waiting until '" + message + "' at " + unixTime + "+" + addSeconds + "s=" + time + " now=" + new Date());
   while ((new Date()).getTime() <= time.getTime()) {
   }
-  console.log("RESULT: Waited until '" + message + "' at at " + unixTime + "+" + addSeconds + "s =" + time + " now=" + new Date());
+  console.log("RESULT: Waited until '" + message + "' at at " + unixTime + "+" + addSeconds + "s=" + time + " now=" + new Date());
   console.log("RESULT: ");
 }
 
@@ -226,10 +227,10 @@ function waitUntil(message, unixTime, addSeconds) {
 //-----------------------------------------------------------------------------
 function waitUntilBlock(message, block, addBlocks) {
   var b = parseInt(block) + parseInt(addBlocks);
-  console.log("RESULT: Waiting until '" + message + "' #" + block + "+" + addBlocks + " = #" + b + " currentBlock=" + eth.blockNumber);
+  console.log("RESULT: Waiting until '" + message + "' #" + block + "+" + addBlocks + "=#" + b + " currentBlock=" + eth.blockNumber);
   while (eth.blockNumber <= b) {
   }
-  console.log("RESULT: Waited until '" + message + "' #" + block + "+" + addBlocks + " = #" + b + " currentBlock=" + eth.blockNumber);
+  console.log("RESULT: Waited until '" + message + "' #" + block + "+" + addBlocks + "=#" + b + " currentBlock=" + eth.blockNumber);
   console.log("RESULT: ");
 }
 
@@ -332,31 +333,39 @@ function printCrowdsaleContractDetails() {
     console.log("RESULT: crowdsale.owner=" + contract.owner());
     console.log("RESULT: crowdsale.newOwner=" + contract.newOwner());
     console.log("RESULT: crowdsale.bttsToken=" + contract.bttsToken());
+    console.log("RESULT: crowdsale.TOKEN_DECIMALS=" + contract.TOKEN_DECIMALS());
+    console.log("RESULT: crowdsale.wallet=" + contract.wallet());
+    console.log("RESULT: crowdsale.teamWallet=" + contract.teamWallet());
+    console.log("RESULT: crowdsale.TEAM_PERCENT_GZE=" + contract.TEAM_PERCENT_GZE());
     console.log("RESULT: crowdsale.bonusList=" + contract.bonusList());
     console.log("RESULT: crowdsale.TIER1_BONUS=" + contract.TIER1_BONUS());
     console.log("RESULT: crowdsale.TIER2_BONUS=" + contract.TIER2_BONUS());
-    console.log("RESULT: crowdsale.wallet=" + contract.wallet());
-    console.log("RESULT: crowdsale.lockedWallet=" + contract.lockedWallet());
-    console.log("RESULT: crowdsale.lockedWalletThresholdEth=" + contract.lockedWalletThresholdEth() + " " + contract.lockedWalletThresholdEth().shift(-18) + " ETH");
+    console.log("RESULT: crowdsale.TIER3_BONUS=" + contract.TIER3_BONUS());
+    console.log("RESULT: crowdsale.getBonusPercent('" + account3 + "')=" + contract.getBonusPercent(account3));
+    console.log("RESULT: crowdsale.getBonusPercent('" + account4 + "')=" + contract.getBonusPercent(account4));
+    console.log("RESULT: crowdsale.getBonusPercent('" + account5 + "')=" + contract.getBonusPercent(account5));
+    console.log("RESULT: crowdsale.getBonusPercent('" + account6 + "')=" + contract.getBonusPercent(account6));
     console.log("RESULT: crowdsale.START_DATE=" + contract.START_DATE() + " " + new Date(contract.START_DATE() * 1000).toUTCString());
     console.log("RESULT: crowdsale.endDate=" + contract.endDate() + " " + new Date(contract.endDate() * 1000).toUTCString());
-    console.log("RESULT: crowdsale.MIN_CONTRIBUTION_ETH=" + contract.MIN_CONTRIBUTION_ETH() + " " + contract.MIN_CONTRIBUTION_ETH().shift(-18) + " ETH");
+    console.log("RESULT: crowdsale.usdPerKEther=" + contract.usdPerKEther() + " = " + contract.usdPerKEther().shift(-3) + " USD per ETH");
+    console.log("RESULT: crowdsale.USD_CENT_PER_GZE=" + contract.USD_CENT_PER_GZE());
     console.log("RESULT: crowdsale.CAP_USD=" + contract.CAP_USD());
     console.log("RESULT: crowdsale.capEth=" + contract.capEth() + " " + contract.capEth().shift(-18) + " ETH");
-    console.log("RESULT: crowdsale.usdPerKEther=" + contract.usdPerKEther());
-    console.log("RESULT: crowdsale.USD_CENT_PER_GZE=" + contract.USD_CENT_PER_GZE());
-    var oneEther = web3.toWei(1, "ether");
-    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 0%)=" + contract.gzeFromEth(oneEther, 0) + " " + contract.gzeFromEth(oneEther, 0).shift(-18) + " GZE");
-    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 15%)=" + contract.gzeFromEth(oneEther, 15) + " " + contract.gzeFromEth(oneEther, 15).shift(-18) + " GZE");
-    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 20%)=" + contract.gzeFromEth(oneEther, 20) + " " + contract.gzeFromEth(oneEther, 20).shift(-18) + " GZE");
-    console.log("RESULT: crowdsale.gzePerEth()=" + contract.gzePerEth() + " " + contract.gzePerEth().shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.MIN_CONTRIBUTION_ETH=" + contract.MIN_CONTRIBUTION_ETH() + " " + contract.MIN_CONTRIBUTION_ETH().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedEth=" + contract.contributedEth() + " " + contract.contributedEth().shift(-18) + " ETH");
     console.log("RESULT: crowdsale.contributedUsd=" + contract.contributedUsd());
     console.log("RESULT: crowdsale.generatedGze=" + contract.generatedGze() + " " + contract.generatedGze().shift(-18) + " GZE");
     console.log("RESULT: crowdsale.lockedAccountThresholdUsd=" + contract.lockedAccountThresholdUsd());
     console.log("RESULT: crowdsale.lockedAccountThresholdEth=" + contract.lockedAccountThresholdEth() + " " + contract.lockedAccountThresholdEth().shift(-18) + " ETH");
-    console.log("RESULT: crowdsale.TEAM=" + contract.TEAM());
-    console.log("RESULT: crowdsale.TEAM_PERCENT=" + contract.TEAM_PERCENT());
+    console.log("RESULT: crowdsale.precommitmentAdjusted=" + contract.precommitmentAdjusted());
+    console.log("RESULT: crowdsale.finalised=" + contract.finalised());
+    var oneEther = web3.toWei(1, "ether");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 0%)=" + contract.gzeFromEth(oneEther, 0) + " " + contract.gzeFromEth(oneEther, 0).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 15%)=" + contract.gzeFromEth(oneEther, 15) + " " + contract.gzeFromEth(oneEther, 15).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 20%)=" + contract.gzeFromEth(oneEther, 20) + " " + contract.gzeFromEth(oneEther, 20).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 35%)=" + contract.gzeFromEth(oneEther, 35) + " " + contract.gzeFromEth(oneEther, 35).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzeFromEth(1 ether, 50%)=" + contract.gzeFromEth(oneEther, 50) + " " + contract.gzeFromEth(oneEther, 50).shift(-18) + " GZE");
+    console.log("RESULT: crowdsale.gzePerEth()=" + contract.gzePerEth() + " " + contract.gzePerEth().shift(-18) + " GZE");
 
     var latestBlock = eth.blockNumber;
     var i;
@@ -375,12 +384,42 @@ function printCrowdsaleContractDetails() {
     });
     bttsTokenUpdatedEvents.stopWatching();
 
+    var walletUpdatedEvents = contract.WalletUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    walletUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: WalletUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    walletUpdatedEvents.stopWatching();
+
+    var teamWalletUpdatedEvents = contract.TeamWalletUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    teamWalletUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: TeamWalletUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    teamWalletUpdatedEvents.stopWatching();
+
     var bonusListUpdatedEvents = contract.BonusListUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
     bonusListUpdatedEvents.watch(function (error, result) {
       console.log("RESULT: BonusListUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
     });
     bonusListUpdatedEvents.stopWatching();
+
+    var endDateUpdatedEvents = contract.EndDateUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    endDateUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: EndDateUpdated " + i++ + " #" + result.blockNumber +
+        " oldEndDate=" + result.args.oldEndDate + " " + new Date(result.args.oldEndDate * 1000).toUTCString() +
+        " newEndDate=" + result.args.newEndDate + " " + new Date(result.args.newEndDate * 1000).toUTCString());
+    });
+    endDateUpdatedEvents.stopWatching();
+
+    var usdPerKEtherUpdatedEvents = contract.UsdPerKEtherUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
+    i = 0;
+    usdPerKEtherUpdatedEvents.watch(function (error, result) {
+      console.log("RESULT: UsdPerKEtherUpdated " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
+    });
+    usdPerKEtherUpdatedEvents.stopWatching();
 
     var lockedAccountThresholdUsdUpdatedEvents = contract.LockedAccountThresholdUsdUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
@@ -389,19 +428,9 @@ function printCrowdsaleContractDetails() {
     });
     lockedAccountThresholdUsdUpdatedEvents.stopWatching();
 
-    var endDateUpdatedEvents = contract.EndDateUpdated({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
-    i = 0;
-    lockedAccountThresholdUsdUpdatedEvents.watch(function (error, result) {
-      console.log("RESULT: EndDateUpdated " + i++ + " #" + result.blockNumber +
-        " oldEndDate=" + result.args.oldEndDate + " " + new Date(result.args.oldEndDate * 1000).toUTCString() +
-        " newEndDate=" + result.args.newEndDate + " " + new Date(result.args.newEndDate * 1000).toUTCString());
-    });
-    endDateUpdatedEvents.stopWatching();
-
     var contributedEvents = contract.Contributed({}, { fromBlock: crowdsaleFromBlock, toBlock: latestBlock });
     i = 0;
     contributedEvents.watch(function (error, result) {
-      console.log("RESULT: Contributed " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
       console.log("RESULT: Contributed " + i++ + " #" + result.blockNumber + " addr=" + result.args.addr + 
         " ethAmount=" + result.args.ethAmount + " " + result.args.ethAmount.shift(-18) + " ETH" +
         " ethRefund=" + result.args.ethRefund + " " + result.args.ethRefund.shift(-18) + " ETH" +
@@ -533,62 +562,5 @@ function printBonusListContractDetails() {
     addressListedEvents.stopWatching();
 
     bonusListFromBlock = latestBlock + 1;
-  }
-}
-
-
-// -----------------------------------------------------------------------------
-// LockedWallet Contract
-// -----------------------------------------------------------------------------
-var lockedWalletContractAddress = null;
-var lockedWalletContractAbi = null;
-
-function addLockedWalletContractAddressAndAbi(address, lockedWalletAbi) {
-  lockedWalletContractAddress = address;
-  lockedWalletContractAbi = lockedWalletAbi;
-}
-
-var lockedWalletFromBlock = 0;
-function printLockedWalletContractDetails() {
-  console.log("RESULT: lockedWalletContractAddress=" + lockedWalletContractAddress);
-  if (lockedWalletContractAddress != null && lockedWalletContractAbi != null) {
-    var contract = eth.contract(lockedWalletContractAbi).at(lockedWalletContractAddress);
-    console.log("RESULT: lockedWallet.owner=" + contract.owner());
-    console.log("RESULT: lockedWallet.newOwner=" + contract.newOwner());
-    console.log("RESULT: lockedWallet.LOCKED_PERIOD=" + contract.LOCKED_PERIOD() + " " + (contract.LOCKED_PERIOD()/(60*60*24)) + " days");
-    console.log("RESULT: crowdsale.lockedTo=" + contract.lockedTo() + " " + new Date(contract.lockedTo() * 1000).toUTCString());
-
-    var latestBlock = eth.blockNumber;
-    var i;
-
-    var ownershipTransferredEvents = contract.OwnershipTransferred({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
-    i = 0;
-    ownershipTransferredEvents.watch(function (error, result) {
-      console.log("RESULT: OwnershipTransferred " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    ownershipTransferredEvents.stopWatching();
-
-    var ethersDepositedEvents = contract.EthersDeposited({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
-    i = 0;
-    ethersDepositedEvents.watch(function (error, result) {
-      console.log("RESULT: EthersDeposited " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    ethersDepositedEvents.stopWatching();
-
-    var ethersWithdrawnEvents = contract.EthersWithdrawn({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
-    i = 0;
-    ethersWithdrawnEvents.watch(function (error, result) {
-      console.log("RESULT: EthersWithdrawn " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    ethersWithdrawnEvents.stopWatching();
-
-    var tokensWithdrawnEvents = contract.TokensWithdrawn({}, { fromBlock: lockedWalletFromBlock, toBlock: latestBlock });
-    i = 0;
-    tokensWithdrawnEvents.watch(function (error, result) {
-      console.log("RESULT: TokensWithdrawn " + i++ + " #" + result.blockNumber + " " + JSON.stringify(result.args));
-    });
-    tokensWithdrawnEvents.stopWatching();
-
-    lockedWalletFromBlock = latestBlock + 1;
   }
 }
