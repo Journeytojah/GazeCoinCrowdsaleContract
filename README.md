@@ -50,10 +50,6 @@
   * [x] contract Owned
   * [x] contract Admined is Owned
   * [x] contract GazeCoinBonusList is Admined
-* [x] [code-review/GazeCoinLockedWallet.md](code-review/GazeCoinLockedWallet.md)
-  * [x] contract ERC20Interface
-  * [x] contract Owned
-  * [x] contract GazeCoinLockedWallet is Owned
 * [ ] [code-review/BTTSTokenFactory.md](code-review/BTTSTokenFactory.md)
   * [ ] contract ERC20Interface
   * [ ] contract ApproveAndCallFallBack
