@@ -383,6 +383,7 @@ printTxData("sendContribution2_3Tx", sendContribution2_3Tx);
 printTxData("sendContribution2_4Tx", sendContribution2_4Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
+generateSummaryJSON();
 console.log("RESULT: ");
 
 
@@ -441,3 +442,5 @@ grep "DATA: " $TEST1OUTPUT | sed "s/DATA: //" > $DEPLOYMENTDATA
 cat $DEPLOYMENTDATA
 grep "RESULT: " $TEST1OUTPUT | sed "s/RESULT: //" > $TEST1RESULTS
 cat $TEST1RESULTS
+grep "JSONSUMMARY: " $TEST1OUTPUT | sed "s/JSONSUMMARY: //" > $JSONSUMMARY
+cat $JSONSUMMARY
