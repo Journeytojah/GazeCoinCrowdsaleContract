@@ -342,17 +342,17 @@ waitUntil("START_DATE", crowdsale.START_DATE(), 0);
 var sendContribution1Message = "Send Contribution #1";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + sendContribution1Message);
-var sendContribution1_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
-var sendContribution1_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
-var sendContribution1_3Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
-var sendContribution1_4Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("100", "ether")});
+var sendContribution1_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_3Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
+var sendContribution1_4Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("10", "ether")});
 while (txpool.status.pending > 0) {
 }
 printBalances();
-failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac3 100 ETH - Bonus Tier 1 50%");
-failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac4 100 ETH - Bonus Tier 2 20%");
-failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 100 ETH - Bonus Tier 3 15%");
-failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 100 ETH - No Bonus");
+failIfTxStatusError(sendContribution1_1Tx, sendContribution1Message + " - ac3 10 ETH - Bonus Tier 1 50%");
+failIfTxStatusError(sendContribution1_2Tx, sendContribution1Message + " - ac4 10 ETH - Bonus Tier 2 20%");
+failIfTxStatusError(sendContribution1_3Tx, sendContribution1Message + " - ac5 10 ETH - Bonus Tier 3 15%");
+failIfTxStatusError(sendContribution1_4Tx, sendContribution1Message + " - ac6 10 ETH - No Bonus");
 printTxData("sendContribution1_1Tx", sendContribution1_1Tx);
 printTxData("sendContribution1_2Tx", sendContribution1_2Tx);
 printTxData("sendContribution1_3Tx", sendContribution1_3Tx);
@@ -366,17 +366,41 @@ console.log("RESULT: ");
 var sendContribution2Message = "Send Contribution #2";
 // -----------------------------------------------------------------------------
 console.log("RESULT: " + sendContribution2Message);
-var sendContribution2_1Tx = eth.sendTransaction({from: account8, to: crowdsaleAddress, gas: 400000, value: web3.toWei("50000", "ether")});
-while (txpool.status.pending > 0) {
-}
-var sendContribution2_2Tx = eth.sendTransaction({from: account9, to: crowdsaleAddress, gas: 400000, value: web3.toWei("30000", "ether")});
+var sendContribution2_1Tx = eth.sendTransaction({from: account3, to: crowdsaleAddress, gas: 400000, value: web3.toWei("90", "ether")});
+var sendContribution2_2Tx = eth.sendTransaction({from: account4, to: crowdsaleAddress, gas: 400000, value: web3.toWei("90", "ether")});
+var sendContribution2_3Tx = eth.sendTransaction({from: account5, to: crowdsaleAddress, gas: 400000, value: web3.toWei("90", "ether")});
+var sendContribution2_4Tx = eth.sendTransaction({from: account6, to: crowdsaleAddress, gas: 400000, value: web3.toWei("90", "ether")});
 while (txpool.status.pending > 0) {
 }
 printBalances();
-failIfTxStatusError(sendContribution2_1Tx, sendContribution2Message + " - ac8 50,000 ETH");
-failIfTxStatusError(sendContribution2_2Tx, sendContribution2Message + " - ac9 30,000 ETH");
+failIfTxStatusError(sendContribution2_1Tx, sendContribution2Message + " - ac3 90 ETH - Bonus Tier 1 50%");
+failIfTxStatusError(sendContribution2_2Tx, sendContribution2Message + " - ac4 90 ETH - Bonus Tier 2 20%");
+failIfTxStatusError(sendContribution2_3Tx, sendContribution2Message + " - ac5 90 ETH - Bonus Tier 3 15%");
+failIfTxStatusError(sendContribution2_4Tx, sendContribution2Message + " - ac6 90 ETH - No Bonus");
 printTxData("sendContribution2_1Tx", sendContribution2_1Tx);
 printTxData("sendContribution2_2Tx", sendContribution2_2Tx);
+printTxData("sendContribution2_3Tx", sendContribution2_3Tx);
+printTxData("sendContribution2_4Tx", sendContribution2_4Tx);
+printCrowdsaleContractDetails();
+printTokenContractDetails();
+console.log("RESULT: ");
+
+
+// -----------------------------------------------------------------------------
+var sendContribution3Message = "Send Contribution #3";
+// -----------------------------------------------------------------------------
+console.log("RESULT: " + sendContribution3Message);
+var sendContribution3_1Tx = eth.sendTransaction({from: account8, to: crowdsaleAddress, gas: 400000, value: web3.toWei("50000", "ether")});
+while (txpool.status.pending > 0) {
+}
+var sendContribution3_2Tx = eth.sendTransaction({from: account9, to: crowdsaleAddress, gas: 400000, value: web3.toWei("30000", "ether")});
+while (txpool.status.pending > 0) {
+}
+printBalances();
+failIfTxStatusError(sendContribution3_1Tx, sendContribution3Message + " - ac8 50,000 ETH");
+failIfTxStatusError(sendContribution3_2Tx, sendContribution3Message + " - ac9 30,000 ETH");
+printTxData("sendContribution3_1Tx", sendContribution3_1Tx);
+printTxData("sendContribution3_2Tx", sendContribution3_2Tx);
 printCrowdsaleContractDetails();
 printTokenContractDetails();
 console.log("RESULT: ");

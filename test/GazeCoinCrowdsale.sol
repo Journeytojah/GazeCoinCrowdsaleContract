@@ -174,10 +174,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     // Start 10 Dec 2017 11:00 EST => 10 Dec 2017 16:00 UTC => 11 Dec 2017 03:00 AEST
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public constant START_DATE = 1512825001; // Sat  9 Dec 2017 13:10:01 UTC
+    uint public constant START_DATE = 1512827041; // Sat  9 Dec 2017 13:44:01 UTC
     // End 21 Dec 2017 11:00 EST => 21 Dec 2017 16:00 UTC => 21 Dec 2017 03:00 AEST
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public endDate = 1512825091; // Sat  9 Dec 2017 13:11:31 UTC
+    uint public endDate = 1512827131; // Sat  9 Dec 2017 13:45:31 UTC
 
     // ETH/USD 8 Dec 2017 11:00 EST => 8 Dec 2017 16:00 UTC => 9 Dec 2017 03:00 AEST => 453.55 from CMC
     uint public usdPerKEther = 453550;
@@ -191,6 +191,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     //  AUD 10,000 = ~ USD 7,500
     uint public lockedAccountThresholdUsd = 7500;
+    mapping(address => uint) public accountEthAmount;
 
     bool public precommitmentAdjusted;
     bool public finalised;
@@ -202,7 +203,7 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     event EndDateUpdated(uint oldEndDate, uint newEndDate);
     event UsdPerKEtherUpdated(uint oldUsdPerKEther, uint newUsdPerKEther);
     event LockedAccountThresholdUsdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
-    event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
+    event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint accountEthAmount, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
     function GazeCoinCrowdsale() public {
     }
@@ -280,12 +281,13 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         generatedGze = safeAdd(generatedGze, gzeAmount);
         contributedEth = safeAdd(contributedEth, ethAmount);
         contributedUsd = safeAdd(contributedUsd, usdAmount);
-        bool lockAccount = ethAmount > lockedAccountThresholdEth();
+        accountEthAmount[msg.sender] = safeAdd(accountEthAmount[msg.sender], ethAmount);
+        bool lockAccount = accountEthAmount[msg.sender] > lockedAccountThresholdEth();
         bttsToken.mint(msg.sender, gzeAmount, lockAccount);
         if (ethAmount > 0) {
             wallet.transfer(ethAmount);
         }
-        Contributed(msg.sender, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+        Contributed(msg.sender, ethAmount, ethRefund, accountEthAmount[msg.sender], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
         if (ethRefund > 0) {
             msg.sender.transfer(ethRefund);
         }
@@ -300,9 +302,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         generatedGze = safeAdd(generatedGze, gzeAmount);
         contributedEth = safeAdd(contributedEth, ethAmount);
         contributedUsd = safeAdd(contributedUsd, usdAmount);
-        bool lockAccount = false;
+        accountEthAmount[tokenOwner] = safeAdd(accountEthAmount[tokenOwner], ethAmount);
+        bool lockAccount = accountEthAmount[tokenOwner] > lockedAccountThresholdEth();
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
-        Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+        Contributed(tokenOwner, ethAmount, ethRefund, accountEthAmount[tokenOwner], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
     function addPrecommitmentAdjustment(address tokenOwner, uint gzeAmount) public onlyOwner {
         require(now > endDate || contributedEth >= capEth());
@@ -311,10 +314,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         uint usdAmount = 0;
         uint ethRefund = 0;
         generatedGze = safeAdd(generatedGze, gzeAmount);
-        bool lockAccount = false;
+        bool lockAccount = accountEthAmount[tokenOwner] > lockedAccountThresholdEth();
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
         precommitmentAdjusted = true;
-        Contributed(tokenOwner, ethAmount, ethRefund, usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+        Contributed(tokenOwner, ethAmount, ethRefund, accountEthAmount[tokenOwner], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
     function roundUp(uint a) public pure returns (uint) {
         uint multiple = 10**uint(TOKEN_DECIMALS);

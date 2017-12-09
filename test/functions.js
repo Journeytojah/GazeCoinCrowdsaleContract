@@ -434,6 +434,7 @@ function printCrowdsaleContractDetails() {
       console.log("RESULT: Contributed " + i++ + " #" + result.blockNumber + " addr=" + result.args.addr + 
         " ethAmount=" + result.args.ethAmount + " " + result.args.ethAmount.shift(-18) + " ETH" +
         " ethRefund=" + result.args.ethRefund + " " + result.args.ethRefund.shift(-18) + " ETH" +
+        " accountEthAmount=" + result.args.accountEthAmount + " " + result.args.accountEthAmount.shift(-18) + " ETH" +
         " usdAmount=" + result.args.usdAmount + " USD" +
         " gzeAmount=" + result.args.gzeAmount + " " + result.args.gzeAmount.shift(-18) + " GZE" +
         " contributedEth=" + result.args.contributedEth + " " + result.args.contributedEth.shift(-18) + " ETH" +
