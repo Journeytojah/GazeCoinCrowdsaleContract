@@ -1,5 +1,5 @@
-// ETH/USD 8 Dec 2017 11:00 EST => 8 Dec 2017 16:00 UTC => 9 Dec 2017 03:00 AEST => 453.55 from CMC
-var ethPriceUSD = 453.55;
+// ETH/USD 9 Dec 2017 11:00 EST => 9 Dec 2017 16:00 UTC => 10 Dec 2017 03:00 AEST => 489.44 from CMC
+var ethPriceUSD = 489.44;
 var defaultGasPrice = web3.toWei(50, "gwei");
 
 // -----------------------------------------------------------------------------
@@ -596,6 +596,7 @@ function generateSummaryJSON() {
     console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(contract.endDate() * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"usdPerEther\": " + contract.usdPerKEther().shift(-3) + ",");
     console.log("JSONSUMMARY:   \"usdPerGze\": " + contract.USD_CENT_PER_GZE().shift(-2) + ",");
+    console.log("JSONSUMMARY:   \"gzePerEth\": " + contract.gzePerEth().shift(-18) + ",");
     console.log("JSONSUMMARY:   \"capInUsd\": " + contract.CAP_USD() + ",");
     console.log("JSONSUMMARY:   \"capInEth\": " + contract.capEth().shift(-18) + ",");
     console.log("JSONSUMMARY:   \"minimumContributionEth\": " + contract.MIN_CONTRIBUTION_ETH().shift(-18) + ",");
