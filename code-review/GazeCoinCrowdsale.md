@@ -212,44 +212,64 @@ contract Owned {
 // ----------------------------------------------------------------------------
 // GazeCoin Crowdsale Contract
 // ----------------------------------------------------------------------------
+// BK Ok
 contract GazeCoinCrowdsale is SafeMath, Owned {
 
+    // BK Ok
     BTTSTokenInterface public bttsToken;
+    // BK Ok
     uint8 public constant TOKEN_DECIMALS = 18;
 
+    // BK Ok
     address public wallet = 0x8cD8baa410E9172b949f2c4433D3b5905F8606fF;
+    // BK Ok
     address public teamWallet = 0xb4eC550893D31763C02EBDa44Dff90b7b5a62656;
+    // BK Ok
     uint public constant TEAM_PERCENT_GZE = 30;
 
+    // BK Ok
     BonusListInterface public bonusList;
+    // BK Next 3 Ok
     uint public constant TIER1_BONUS = 50;
     uint public constant TIER2_BONUS = 20;
     uint public constant TIER3_BONUS = 15;
 
     // Start 10 Dec 2017 11:00 EST => 10 Dec 2017 16:00 UTC => 11 Dec 2017 03:00 AEST
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
+    // BK Ok - new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
     uint public constant START_DATE = 1512921600;
     // End 21 Dec 2017 11:00 EST => 21 Dec 2017 16:00 UTC => 21 Dec 2017 03:00 AEST
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
+    // BK Ok - new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
     uint public endDate = 1513872000;
 
     // ETH/USD 9 Dec 2017 11:00 EST => 9 Dec 2017 16:00 UTC => 10 Dec 2017 03:00 AEST => 489.44 from CMC
+    // BK Ok
     uint public usdPerKEther = 489440;
+    // BK Ok
     uint public constant USD_CENT_PER_GZE = 35;
+    // BK Ok
     uint public constant CAP_USD = 35000000;
+    // BK Ok
     uint public constant MIN_CONTRIBUTION_ETH = 0.01 ether;
 
+    // BK Next 3 Ok
     uint public contributedEth;
     uint public contributedUsd;
     uint public generatedGze;
 
     //  AUD 10,000 = ~ USD 7,500
+    // BK Ok
     uint public lockedAccountThresholdUsd = 7500;
+    // BK Ok
     mapping(address => uint) public accountEthAmount;
 
+    // BK Ok
     bool public precommitmentAdjusted;
+    // BK Ok
     bool public finalised;
 
+    // BK Next 8 Ok - Events
     event BTTSTokenUpdated(address indexed oldBTTSToken, address indexed newBTTSToken);
     event WalletUpdated(address indexed oldWallet, address indexed newWallet);
     event TeamWalletUpdated(address indexed oldTeamWallet, address indexed newTeamWallet);
@@ -259,39 +279,65 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     event LockedAccountThresholdUsdUpdated(uint oldEthLockedThreshold, uint newEthLockedThreshold);
     event Contributed(address indexed addr, uint ethAmount, uint ethRefund, uint accountEthAmount, uint usdAmount, uint gzeAmount, uint contributedEth, uint contributedUsd, uint generatedGze, bool lockAccount);
 
+    // BK Ok - Constructor
     function GazeCoinCrowdsale() public {
     }
+    // BK Ok - Only owner can execute
     function setBTTSToken(address _bttsToken) public onlyOwner {
+        // BK Ok
         require(now <= START_DATE);
+        // BK Ok - Log event
         BTTSTokenUpdated(address(bttsToken), _bttsToken);
+        // BK Ok
         bttsToken = BTTSTokenInterface(_bttsToken);
     }
+    // BK Ok - Only owner can execute
     function setWallet(address _wallet) public onlyOwner {
+        // BK Ok - Log event
         WalletUpdated(wallet, _wallet);
+        // BK Ok
         wallet = _wallet;
     }
+    // BK Ok - Only owner can execute
     function setTeamWallet(address _teamWallet) public onlyOwner {
+        // BK Ok - Log event
         TeamWalletUpdated(teamWallet, _teamWallet);
+        // BK Ok
         teamWallet = _teamWallet;
     }
+    // BK Ok - Only owner can execute
     function setBonusList(address _bonusList) public onlyOwner {
         require(now <= START_DATE);
+        // BK Ok - Log event
         BonusListUpdated(address(bonusList), _bonusList);
+        // BK Ok
         bonusList = BonusListInterface(_bonusList);
     }
+    // BK Ok - Only owner can execute
     function setEndDate(uint _endDate) public onlyOwner {
+        // BK Ok
         require(_endDate >= now);
+        // BK Ok - Log event
         EndDateUpdated(endDate, _endDate);
+        // BK Ok
         endDate = _endDate;
     }
+    // BK Ok - Only owner can execute
     function setUsdPerKEther(uint _usdPerKEther) public onlyOwner {
+        // BK Ok
         require(now <= START_DATE);
+        // BK Ok - Log event
         UsdPerKEtherUpdated(usdPerKEther, _usdPerKEther);
+        // BK Ok
         usdPerKEther = _usdPerKEther;
     }
+    // BK Ok - Only owner can execute
     function setLockedAccountThresholdUsd(uint _lockedAccountThresholdUsd) public onlyOwner {
+        // BK Ok
         require(now <= START_DATE);
+        // BK Ok - Log event
         LockedAccountThresholdUsdUpdated(lockedAccountThresholdUsd, _lockedAccountThresholdUsd);
+        // BK Ok
         lockedAccountThresholdUsd = _lockedAccountThresholdUsd;
     }
 
