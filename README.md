@@ -14,6 +14,17 @@
 
 <hr />
 
+## Mainnet Deployment
+
+* Crowdsale contract [0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b](https://etherscan.io/address/0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b)
+* BonusList [0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06](https://etherscan.io/address/0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06)
+* Token contract [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/address/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+* Token explorer [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/token/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+
+<br />
+
+<hr />
+
 ## Requirements
 
 * White list to run from now until Dec 5th
@@ -30,10 +41,10 @@
 * [ ] Deploy BTTSTokenFactory - [0x7b179e55](https://etherscan.io/tx/0x7b179e5557202390c481c4523424054085a25d5f3908d38cedf4acba7fda6c88) contract [0x594dd662B580CA58b1186AF45551f34312e91e88](https://etherscan.io/address/0x594dd662b580ca58b1186af45551f34312e91e88)
 * [ ] Deploy BTTSToken from BTTSTokenFactory - [0x8931343d](https://etherscan.io/tx/0x8931343d0b2bc0791f5e7ce23f5ae538463233ac953b14bbb3ae847bfce75d75) contract [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/address/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
 * [ ] Deploy GazeCoinBonusList - [0xfbd4e0c4](https://etherscan.io/tx/0xfbd4e0c42787aea99db1c270cdcfdc25558a3217530a072c21c93cee24462a84) contract [0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06](https://etherscan.io/address/0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06)
-* [ ] Deploy GazeCoinCrowdsale
-* [ ] GazeCoinCrowdsale.setBTTSToken(BTTSToken)
-* [ ] GazeCoinCrowdsale.setBonusList(GazeCoinBonusList)
-* [ ] BTTSToken.setMinter(GazeCoinCrowdsale)
+* [ ] Deploy GazeCoinCrowdsale - [0x52a088](https://etherscan.io/tx/0x52a088e7fea4ad19495268e8bad7e5092d2f715896f204c7edcf023c7967b0c0) contract [0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b](https://etherscan.io/address/0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b)
+* [ ] GazeCoinCrowdsale.setBTTSToken(BTTSToken) - 0x9cb242ce133edf08b6c61aa6c6c56479c49992ddbe9ae0ad6189903377d2a754
+* [ ] GazeCoinCrowdsale.setBonusList(GazeCoinBonusList) - 0xd7d74236b064517cf41939957287949876a8bb79e79621810fb5630d43b67c5c
+* [ ] BTTSToken.setMinter(GazeCoinCrowdsale) - 0xcbda5d4b53fa3af2368df8e3dda288794e4d4b6d1c4ae1ac1ad2c1595a009bbc
 * [ ] Check contract values
   * [ ] usdPerEther 489.44
   * [ ] gzePerEth 1398.40
