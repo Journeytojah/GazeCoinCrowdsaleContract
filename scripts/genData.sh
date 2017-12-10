@@ -24,11 +24,7 @@ function generateSummaryJSON() {
     console.log("JSONSUMMARY:   \"tier2Bonus\": " + contract.TIER2_BONUS() + ",");
     console.log("JSONSUMMARY:   \"tier3Bonus\": " + contract.TIER3_BONUS() + ",");
     var startDate = contract.START_DATE();
-    // BK TODO - Remove for production
-    startDate = 1512921600;
     var endDate = contract.endDate();
-    // BK TODO - Remove for production
-    endDate = 1513872000;
     console.log("JSONSUMMARY:   \"crowdsaleStart\": " + startDate + ",");
     console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(startDate * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"crowdsaleEnd\": " + endDate + ",");
@@ -45,7 +41,41 @@ function generateSummaryJSON() {
     console.log("JSONSUMMARY:   \"lockedAccountThresholdUsd\": " + contract.lockedAccountThresholdUsd() + ",");
     console.log("JSONSUMMARY:   \"lockedAccountThresholdEth\": " + contract.lockedAccountThresholdEth().shift(-18) + ",");
     console.log("JSONSUMMARY:   \"precommitmentAdjusted\": " + contract.precommitmentAdjusted() + ",");
-    console.log("JSONSUMMARY:   \"finalised\": " + contract.finalised());
+    console.log("JSONSUMMARY:   \"finalised\": " + contract.finalised() + ",");
+    var separator = "";
+    var fromBlock = 4708298;
+    var contributedEvents = contract.Contributed({}, { fromBlock: fromBlock, toBlock: "latest" }).get();
+    console.log("JSONSUMMARY:   \"numberOfContributions\": " + contributedEvents.length + ",");
+    console.log("JSONSUMMARY:   \"contributions\": [");
+    for (var i = 0; i < contributedEvents.length; i++) {
+      var e = contributedEvents[i];
+      var separator;
+      if (i == contributedEvents.length - 1) {
+        separator = "";
+      } else {
+        separator = ",";
+      }
+      var ts = eth.getBlock(e.blockNumber).timestamp;
+      console.log("JSONSUMMARY:     {");
+      console.log("JSONSUMMARY:       \"address\": \"" + e.args.addr + "\",");
+      console.log("JSONSUMMARY:       \"transactionHash\": \"" + e.transactionHash + "\",");
+      console.log("JSONSUMMARY:       \"href\": \"https://etherscan.io/tx/" + e.transactionHash + "\",");
+      console.log("JSONSUMMARY:       \"blockNumber\": " + e.blockNumber + ",");
+      console.log("JSONSUMMARY:       \"transactionIndex\": " + e.transactionIndex + ",");
+      console.log("JSONSUMMARY:       \"timestamp\": " + ts + ",");
+      console.log("JSONSUMMARY:       \"timestampString\": \"" + new Date(ts * 1000).toUTCString() + "\",");
+      console.log("JSONSUMMARY:       \"ethAmount\": " + e.args.ethAmount.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"ethRefund\": " + e.args.ethRefund.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"accountTotalEthAmount\": " + e.args.accountEthAmount.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"usdAmount\": " + e.args.usdAmount + ",");
+      console.log("JSONSUMMARY:       \"gzeAmount\": " + e.args.gzeAmount.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"contributedEth\": " + e.args.contributedEth.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"contributedUsd\": " + e.args.contributedUsd + ",");
+      console.log("JSONSUMMARY:       \"generatedGze\": " + e.args.generatedGze.shift(-18) + ",");
+      console.log("JSONSUMMARY:       \"accountLocked\": " + e.args.lockAccount + "");
+      console.log("JSONSUMMARY:     }" + separator);
+    }
+    console.log("JSONSUMMARY:   ]");
   }
   console.log("JSONSUMMARY: }");
 }

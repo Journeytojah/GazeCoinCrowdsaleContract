@@ -17,3 +17,6 @@ var tx8 = crowdsale.addPrecommitment("0xBf9219C906A427f21867563F43f1b0381F8C3E87
 var tx9 = crowdsale.addPrecommitment("0xd4c87427c45a870ef15815e24a3d126e41cb71d3", web3.toWei("3", "ether"), 35, {from: gazeAccount, gas: 1000000, gasPrice: gasPrice, gas: gas});
 var tx10 = crowdsale.addPrecommitment("0x5A42AbFaFE7eEf572D9dEA240871291b7dB7C318", web3.toWei("0.202", "ether"), 35, {from: gazeAccount, gas: 1000000, gasPrice: gasPrice, gas: gas});
 var tx11 = crowdsale.addPrecommitment("0x7D4ac7A8d484538D71dBe8c54087C6ce61b98bE7", web3.toWei("2.2", "ether"), 35, {from: gazeAccount, gas: 1000000, gasPrice: gasPrice, gas: gas});
+
+var gasPrice=web3.toWei(18, "gwei");
+var tx12 = crowdsale.addPrecommitment("0xa9bf492dBefa60e7969d40aC58b3883AC465F9c6", web3.toWei("357.5514874", "ether"), 35, {from: gazeAccount, gas: 1000000, gasPrice: gasPrice, gas: gas});
