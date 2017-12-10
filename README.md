@@ -26,11 +26,11 @@
 
 ## Deployment To Mainnet
 
-* [ ] Deploy BTTSLibrary
-* [ ] Deploy BTTSTokenFactory
-* [ ] Deploy BTTSToken from BTTSTokenFactory
+* [ ] Deploy BTTSLibrary - [0x655e9791](https://etherscan.io/tx/0x655e97912f8b1a0778897f46bc0e366f4029bbdb8ede92aa25ad14b71d8982b7) contract [0x9bB2eAe0BE24460a1f8292FB2C48c300F5622E64](https://etherscan.io/address/0x9bb2eae0be24460a1f8292fb2c48c300f5622e64)
+* [ ] Deploy BTTSTokenFactory - [0x7b179e55](https://etherscan.io/tx/0x7b179e5557202390c481c4523424054085a25d5f3908d38cedf4acba7fda6c88) contract [0x594dd662B580CA58b1186AF45551f34312e91e88](https://etherscan.io/address/0x594dd662b580ca58b1186af45551f34312e91e88)
+* [ ] Deploy BTTSToken from BTTSTokenFactory - [0x8931343d](https://etherscan.io/tx/0x8931343d0b2bc0791f5e7ce23f5ae538463233ac953b14bbb3ae847bfce75d75) contract [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/address/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+* [ ] Deploy GazeCoinBonusList - [0xfbd4e0c4](https://etherscan.io/tx/0xfbd4e0c42787aea99db1c270cdcfdc25558a3217530a072c21c93cee24462a84) contract [0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06](https://etherscan.io/address/0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06)
 * [ ] Deploy GazeCoinCrowdsale
-* [ ] Deploy GazeCoinBonusList
 * [ ] GazeCoinCrowdsale.setBTTSToken(BTTSToken)
 * [ ] GazeCoinCrowdsale.setBonusList(GazeCoinBonusList)
 * [ ] BTTSToken.setMinter(GazeCoinCrowdsale)

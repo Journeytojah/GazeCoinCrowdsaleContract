@@ -68,7 +68,7 @@ contract Admined is Owned {
 
 
 // ----------------------------------------------------------------------------
-// Bonus list - Tiers 1 and 2, with 0 as disabled
+// Bonus list - Tiers 1, 2 and 3, with 0 as disabled
 // ----------------------------------------------------------------------------
 contract GazeCoinBonusList is Admined {
     bool public sealed;
