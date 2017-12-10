@@ -590,10 +590,16 @@ function generateSummaryJSON() {
     console.log("JSONSUMMARY:   \"tier1Bonus\": " + contract.TIER1_BONUS() + ",");
     console.log("JSONSUMMARY:   \"tier2Bonus\": " + contract.TIER2_BONUS() + ",");
     console.log("JSONSUMMARY:   \"tier3Bonus\": " + contract.TIER3_BONUS() + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleStart\": " + contract.START_DATE() + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(contract.START_DATE() * 1000).toUTCString() + "\",");
-    console.log("JSONSUMMARY:   \"crowdsaleEnd\": " + contract.endDate() + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(contract.endDate() * 1000).toUTCString() + "\",");
+    var startDate = contract.START_DATE();
+    // BK TODO - Remove for production
+    startDate = 1512921600;
+    var endDate = contract.endDate();
+    // BK TODO - Remove for production
+    endDate = 1513872000;
+    console.log("JSONSUMMARY:   \"crowdsaleStart\": " + startDate + ",");
+    console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(startDate * 1000).toUTCString() + "\",");
+    console.log("JSONSUMMARY:   \"crowdsaleEnd\": " + endDate + ",");
+    console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(endDate * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"usdPerEther\": " + contract.usdPerKEther().shift(-3) + ",");
     console.log("JSONSUMMARY:   \"usdPerGze\": " + contract.USD_CENT_PER_GZE().shift(-2) + ",");
     console.log("JSONSUMMARY:   \"gzePerEth\": " + contract.gzePerEth().shift(-18) + ",");

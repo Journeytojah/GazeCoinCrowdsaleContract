@@ -174,10 +174,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     // Start 10 Dec 2017 11:00 EST => 10 Dec 2017 16:00 UTC => 11 Dec 2017 03:00 AEST
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public constant START_DATE = 1512836033; // Sat  9 Dec 2017 16:13:53 UTC
+    uint public constant START_DATE = 1512865666; // Sun 10 Dec 2017 00:27:46 UTC
     // End 21 Dec 2017 11:00 EST => 21 Dec 2017 16:00 UTC => 21 Dec 2017 03:00 AEST
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public endDate = 1512836123; // Sat  9 Dec 2017 16:15:23 UTC
+    uint public endDate = 1512865756; // Sun 10 Dec 2017 00:29:16 UTC
 
     // ETH/USD 9 Dec 2017 11:00 EST => 9 Dec 2017 16:00 UTC => 10 Dec 2017 03:00 AEST => 489.44 from CMC
     uint public usdPerKEther = 489440;
@@ -294,7 +294,6 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function addPrecommitment(address tokenOwner, uint ethAmount, uint bonusPercent) public onlyOwner {
-        require(now < START_DATE);
         require(!finalised);
         uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);

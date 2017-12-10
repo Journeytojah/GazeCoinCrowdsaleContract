@@ -294,7 +294,6 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
     }
 
     function addPrecommitment(address tokenOwner, uint ethAmount, uint bonusPercent) public onlyOwner {
-        require(now < START_DATE);
         require(!finalised);
         uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
