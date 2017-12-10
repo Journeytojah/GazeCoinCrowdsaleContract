@@ -2,9 +2,14 @@
 
 geth attach << EOF | grep "JSONSUMMARY:" | sed "s/JSONSUMMARY: //" > tmp.json
 loadScript("crowdsale.js");
+loadScript("bonusList.js");
 
 function generateSummaryJSON() {
   console.log("JSONSUMMARY: {");
+  var bonusList = null
+  if (bonusListAddress != null && bonusListAbi != null) {
+    bonusList = eth.contract(bonusListAbi).at(bonusListAddress);
+  }
   if (crowdsaleContractAddress != null && crowdsaleContractAbi != null) {
     var contract = eth.contract(crowdsaleContractAbi).at(crowdsaleContractAddress);
     var blockNumber = eth.blockNumber;
@@ -48,7 +53,7 @@ function generateSummaryJSON() {
     console.log("JSONSUMMARY:   \"numberOfContributions\": " + contributedEvents.length + ",");
     console.log("JSONSUMMARY:   \"contributions\": [");
     for (var i = 0; i < contributedEvents.length; i++) {
-      var e = contributedEvents[i];
+      var e = contributedEvents[contributedEvents.length - 1 - i];
       var separator;
       if (i == contributedEvents.length - 1) {
         separator = "";
@@ -58,6 +63,10 @@ function generateSummaryJSON() {
       var ts = eth.getBlock(e.blockNumber).timestamp;
       console.log("JSONSUMMARY:     {");
       console.log("JSONSUMMARY:       \"address\": \"" + e.args.addr + "\",");
+      var tier = bonusList != null ? bonusList.bonusList(e.args.addr) : 0;
+      console.log("JSONSUMMARY:       \"tier\": " + tier + ",");
+      var bonusPercent = contract.getBonusPercent(e.args.addr);
+      console.log("JSONSUMMARY:       \"bonusPercent\": " + bonusPercent + ",");
       console.log("JSONSUMMARY:       \"transactionHash\": \"" + e.transactionHash + "\",");
       console.log("JSONSUMMARY:       \"href\": \"https://etherscan.io/tx/" + e.transactionHash + "\",");
       console.log("JSONSUMMARY:       \"blockNumber\": " + e.blockNumber + ",");
