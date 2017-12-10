@@ -341,18 +341,23 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
         lockedAccountThresholdUsd = _lockedAccountThresholdUsd;
     }
 
+    // BK Next function Ok - View function
     function capEth() public view returns (uint) {
         return CAP_USD * 10**uint(3 + 18) / usdPerKEther;
     }
+    // BK Next function Ok - View function
     function gzeFromEth(uint ethAmount, uint bonusPercent) public view returns (uint) {
         return usdPerKEther * ethAmount * (100 + bonusPercent) / 10**uint(3 + 2 - 2) / USD_CENT_PER_GZE;
     }
+    // BK Next function Ok - View function
     function gzePerEth() public view returns (uint) {
         return gzeFromEth(10**18, 0);
     }
+    // BK Next function Ok - View function
     function lockedAccountThresholdEth() public view returns (uint) {
         return lockedAccountThresholdUsd * 10**uint(3 + 18) / usdPerKEther;
     }
+    // BK Next function Ok - View function
     function getBonusPercent(address addr) public view returns (uint bonusPercent) {
         uint tier = bonusList.bonusList(addr);
         if (tier == 1) {
@@ -365,81 +370,144 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
             bonusPercent = 0;
         }
     }
+    // BK Next function Ok - Payable
     function () public payable {
+        // BK Ok - Normal contribution during period, owner can contribute 0.01 ETH at anytime. mint will fail when finalised
         require((now >= START_DATE && now <= endDate) || (msg.sender == owner && msg.value == MIN_CONTRIBUTION_ETH));
+        // BK Ok
         require(contributedEth < capEth());
+        // BK Ok
         require(msg.value >= MIN_CONTRIBUTION_ETH);
+        // BK Ok
         uint bonusPercent = getBonusPercent(msg.sender);
+        // BK Next 2 Ok
         uint ethAmount = msg.value;
         uint ethRefund = 0;
+        // BK Ok
         if (safeAdd(contributedEth, ethAmount) > capEth()) {
+            // BK Ok
             ethAmount = safeSub(capEth(), contributedEth);
+            // BK Ok
             ethRefund = safeSub(msg.value, ethAmount);
         }
+        // BK Ok
         uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
+        // BK Ok
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
+        // BK Ok
         generatedGze = safeAdd(generatedGze, gzeAmount);
+        // BK Ok
         contributedEth = safeAdd(contributedEth, ethAmount);
+        // BK Ok
         contributedUsd = safeAdd(contributedUsd, usdAmount);
+        // BK Ok
         accountEthAmount[msg.sender] = safeAdd(accountEthAmount[msg.sender], ethAmount);
+        // BK Ok
         bool lockAccount = accountEthAmount[msg.sender] > lockedAccountThresholdEth();
+        // BK Ok
         bttsToken.mint(msg.sender, gzeAmount, lockAccount);
+        // BK Ok
         if (ethAmount > 0) {
+            // BK Ok
             wallet.transfer(ethAmount);
         }
+        // BK Ok - Log event
         Contributed(msg.sender, ethAmount, ethRefund, accountEthAmount[msg.sender], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
+        // BK Ok
         if (ethRefund > 0) {
+            // BK Ok
             msg.sender.transfer(ethRefund);
         }
     }
 
+    // BK Ok - Only owner can execute
     function addPrecommitment(address tokenOwner, uint ethAmount, uint bonusPercent) public onlyOwner {
+        // BK Ok
         require(!finalised);
+        // BK Ok
         uint usdAmount = safeDiv(safeMul(ethAmount, usdPerKEther), 10**uint(3 + 18));
+        // BK Ok
         uint gzeAmount = gzeFromEth(ethAmount, bonusPercent);
+        // BK Ok
         uint ethRefund = 0;
+        // BK Ok
         generatedGze = safeAdd(generatedGze, gzeAmount);
+        // BK Ok
         contributedEth = safeAdd(contributedEth, ethAmount);
+        // BK Ok
         contributedUsd = safeAdd(contributedUsd, usdAmount);
+        // BK Ok
         accountEthAmount[tokenOwner] = safeAdd(accountEthAmount[tokenOwner], ethAmount);
+        // BK Ok
         bool lockAccount = accountEthAmount[tokenOwner] > lockedAccountThresholdEth();
+        // BK Ok
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
+        // BK Ok - Log event
         Contributed(tokenOwner, ethAmount, ethRefund, accountEthAmount[tokenOwner], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
+    // BK Ok - Only owner can execute, after the sale ends
     function addPrecommitmentAdjustment(address tokenOwner, uint gzeAmount) public onlyOwner {
+        // BK Ok
         require(now > endDate || contributedEth >= capEth());
+        // BK Ok
         require(!finalised);
+        // BK Next 3 Ok
         uint ethAmount = 0;
         uint usdAmount = 0;
         uint ethRefund = 0;
+        // BK Ok
         generatedGze = safeAdd(generatedGze, gzeAmount);
+        // BK Ok
         bool lockAccount = accountEthAmount[tokenOwner] > lockedAccountThresholdEth();
+        // BK Ok
         bttsToken.mint(tokenOwner, gzeAmount, lockAccount);
+        // BK Ok
         precommitmentAdjusted = true;
+        // BK Ok - Log event
         Contributed(tokenOwner, ethAmount, ethRefund, accountEthAmount[tokenOwner], usdAmount, gzeAmount, contributedEth, contributedUsd, generatedGze, lockAccount);
     }
+    // BK Ok - Pure function
     function roundUp(uint a) public pure returns (uint) {
+        // BK Ok
         uint multiple = 10**uint(TOKEN_DECIMALS);
+        // BK Ok
         uint remainder = a % multiple;
+        // BK Ok
         if (remainder > 0) {
+            // BK Ok
             return safeSub(safeAdd(a, multiple), remainder);
         }
     }
+    // BK Ok - Only owner can execute
     function finalise() public onlyOwner {
+        // BK Ok
         require(!finalised);
+        // BK Ok
         require(precommitmentAdjusted);
+        // BK Ok
         require(now > endDate || contributedEth >= capEth());
+        // BK Ok
         uint total = safeDiv(safeMul(generatedGze, 100), safeSub(100, TEAM_PERCENT_GZE));
+        // BK Ok
         uint amountTeam = safeDiv(safeMul(total, TEAM_PERCENT_GZE), 100);
+        // BK Ok
         generatedGze = safeAdd(generatedGze, amountTeam);
+        // BK Ok
         uint rounded = roundUp(generatedGze);
+        // BK Ok
         if (rounded > generatedGze) {
+            // BK Ok
             uint dust = safeSub(rounded, generatedGze);
+            // BK Ok
             generatedGze = safeAdd(generatedGze, dust);
+            // BK Ok
             amountTeam = safeAdd(amountTeam, dust);
         }
+        // BK Ok
         bttsToken.mint(teamWallet, amountTeam, false);
+        // BK Ok
         bttsToken.disableMinting();
+        // BK Ok
         finalised = true;
     }
 }

@@ -26,13 +26,31 @@
 
 ## Deployment To Mainnet
 
-* Update [contracts/GazeCoinCrowdsale.sol](contracts/GazeCoinCrowdsale.sol)
-  * [ ] Update `usdPerKEther` to e.g. `453550` for 453.550 ETH/USD
-    * [ ] Check `gzeFromEth(...)` that the rate is sensible
-  * [ ] Update `wallet` and `TEAM` wallets
-  * [ ] Check `lockedAccountThresholdUsd` to e.g. `7500` for USD 7,500 AML/KYC limit
+* [ ] Deploy BTTSLibrary
+* [ ] Deploy BTTSTokenFactory
+* [ ] Deploy BTTSToken from BTTSTokenFactory
+* [ ] Deploy GazeCoinCrowdsale
+* [ ] Deploy GazeCoinBonusList
+* [ ] GazeCoinCrowdsale.setBTTSToken(BTTSToken)
+* [ ] GazeCoinCrowdsale.setBonusList(GazeCoinBonusList)
+* [ ] BTTSToken.setMinter(GazeCoinCrowdsale)
+* [ ] Check contract values
+  * [ ] usdPerEther 489.44
+  * [ ] gzePerEth 1398.40
+  * [ ] gzePerEth +15% 1608.16
+  * [ ] gzePerEth +20% 1678.08
+  * [ ] gzePerEth +35% 1887.84
+  * [ ] gzePerEth +50% 2097.60
 * [ ] Send test transaction of 0.01 ETH from the contract owner account before start of crowdsale
-  * [ ] Check tokens and ETH flow into multisig.
+  * [ ] Check tokens generated and ETH flow into multisig
+* [ ] GazeCoinCrowdsale.addPrecommitment(tokenOwner, ethAmount, bonusPercent)
+* [ ] GazeCoinBonusList.add([addresses, ...], tier)
+  * Tier 1 +50%
+  * Tier 2 +20%
+  * Tier 3 +15%
+* Crowdsale continues to end date or cap reached
+* [ ] GazeCoinCrowdsale.addPrecommitmentAdjustment(tokenOwner, gzeAmount)
+* [ ] GazeCoinCrowdsale.finalise()
 
 <br />
 
@@ -50,16 +68,16 @@
   * [x] contract Owned
   * [x] contract Admined is Owned
   * [x] contract GazeCoinBonusList is Admined
-* [ ] [code-review/GazeCoinCrowdsale.md](code-review/GazeCoinCrowdsale.md)
+* [x] [code-review/GazeCoinCrowdsale.md](code-review/GazeCoinCrowdsale.md)
   * [x] contract ERC20Interface
   * [x] contract BTTSTokenInterface is ERC20Interface
   * [x] contract BonusListInterface
   * [x] contract SafeMath
   * [x] contract Owned
-  * [ ] contract GazeCoinCrowdsale is SafeMath, Owned
+  * [x] contract GazeCoinCrowdsale is SafeMath, Owned
 
 <br />
 
 <br />
 
-(c) BokkyPooBah / Bok Consulting Pty Ltd for GazeCoin - Dec 02 2017. The MIT Licence.
+(c) BokkyPooBah / Bok Consulting Pty Ltd for GazeCoin - Dec 10 2017. The MIT Licence.

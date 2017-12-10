@@ -83,7 +83,7 @@ contract GazeCoinBonusList is Admined {
         require(addresses.length != 0);
         for (uint i = 0; i < addresses.length; i++) {
             require(addresses[i] != address(0));
-            if (bonusList[addresses[i]] == 0) {
+            if (bonusList[addresses[i]] != tier) {
                 bonusList[addresses[i]] = tier;
                 AddressListed(addresses[i], tier);
             }
