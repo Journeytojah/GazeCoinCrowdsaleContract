@@ -174,10 +174,10 @@ contract GazeCoinCrowdsale is SafeMath, Owned {
 
     // Start 10 Dec 2017 11:00 EST => 10 Dec 2017 16:00 UTC => 11 Dec 2017 03:00 AEST
     // new Date(1512921600 * 1000).toUTCString() => "Sun, 10 Dec 2017 16:00:00 UTC"
-    uint public constant START_DATE = 1512865666; // Sun 10 Dec 2017 00:27:46 UTC
+    uint public constant START_DATE = 1512881128; // Sun 10 Dec 2017 04:45:28 UTC
     // End 21 Dec 2017 11:00 EST => 21 Dec 2017 16:00 UTC => 21 Dec 2017 03:00 AEST
     // new Date(1513872000 * 1000).toUTCString() => "Thu, 21 Dec 2017 16:00:00 UTC"
-    uint public endDate = 1512865756; // Sun 10 Dec 2017 00:29:16 UTC
+    uint public endDate = 1512881218; // Sun 10 Dec 2017 04:46:58 UTC
 
     // ETH/USD 9 Dec 2017 11:00 EST => 9 Dec 2017 16:00 UTC => 10 Dec 2017 03:00 AEST => 489.44 from CMC
     uint public usdPerKEther = 489440;

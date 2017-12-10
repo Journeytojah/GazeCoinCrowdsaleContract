@@ -249,7 +249,6 @@ function printTokenContractDetails() {
     console.log("RESULT: token.symbol=" + contract.symbol());
     console.log("RESULT: token.name=" + contract.name());
     console.log("RESULT: token.decimals=" + decimals);
-    console.log("RESULT: token.decimalsFactor=" + contract.decimalsFactor());
     console.log("RESULT: token.totalSupply=" + contract.totalSupply().shift(-decimals));
     console.log("RESULT: token.transferable=" + contract.transferable());
     console.log("RESULT: token.mintable=" + contract.mintable());
