@@ -16,7 +16,8 @@ function generateSummaryJSON() {
     var timestamp = eth.getBlock(blockNumber).timestamp;
     console.log("JSONSUMMARY:   \"blockNumber\": " + blockNumber + ",");
     console.log("JSONSUMMARY:   \"blockTimestamp\": " + timestamp + ",");
-    console.log("JSONSUMMARY:   \"blockTimestampString\": \"" + new Date(timestamp * 1000).toUTCString() + "\",");
+    console.log("JSONSUMMARY:   \"blockTimestampString\": \"" + new Date(timestamp * 1000).toString() + "\",");
+    console.log("JSONSUMMARY:   \"blockTimestampUTCString\": \"" + new Date(timestamp * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"crowdsaleContractAddress\": \"" + crowdsaleContractAddress + "\",");
     console.log("JSONSUMMARY:   \"crowdsaleContractOwnerAddress\": \"" + contract.owner() + "\",");
     console.log("JSONSUMMARY:   \"tokenContractAddress\": \"" + contract.bttsToken() + "\",");
@@ -31,9 +32,11 @@ function generateSummaryJSON() {
     var startDate = contract.START_DATE();
     var endDate = contract.endDate();
     console.log("JSONSUMMARY:   \"crowdsaleStart\": " + startDate + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(startDate * 1000).toUTCString() + "\",");
+    console.log("JSONSUMMARY:   \"crowdsaleStartString\": \"" + new Date(startDate * 1000).toString() + "\",");
+    console.log("JSONSUMMARY:   \"crowdsaleStartUTCString\": \"" + new Date(startDate * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"crowdsaleEnd\": " + endDate + ",");
-    console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(endDate * 1000).toUTCString() + "\",");
+    console.log("JSONSUMMARY:   \"crowdsaleEndString\": \"" + new Date(endDate * 1000).toString() + "\",");
+    console.log("JSONSUMMARY:   \"crowdsaleEndUTCString\": \"" + new Date(endDate * 1000).toUTCString() + "\",");
     console.log("JSONSUMMARY:   \"usdPerEther\": " + contract.usdPerKEther().shift(-3) + ",");
     console.log("JSONSUMMARY:   \"usdPerGze\": " + contract.USD_CENT_PER_GZE().shift(-2) + ",");
     console.log("JSONSUMMARY:   \"gzePerEth\": " + contract.gzePerEth().shift(-18) + ",");
@@ -72,7 +75,8 @@ function generateSummaryJSON() {
       console.log("JSONSUMMARY:       \"blockNumber\": " + e.blockNumber + ",");
       console.log("JSONSUMMARY:       \"transactionIndex\": " + e.transactionIndex + ",");
       console.log("JSONSUMMARY:       \"timestamp\": " + ts + ",");
-      console.log("JSONSUMMARY:       \"timestampString\": \"" + new Date(ts * 1000).toUTCString() + "\",");
+      console.log("JSONSUMMARY:       \"timestampString\": \"" + new Date(ts * 1000).toString() + "\",");
+      console.log("JSONSUMMARY:       \"timestampUTCString\": \"" + new Date(ts * 1000).toUTCString() + "\",");
       console.log("JSONSUMMARY:       \"ethAmount\": " + e.args.ethAmount.shift(-18) + ",");
       console.log("JSONSUMMARY:       \"ethRefund\": " + e.args.ethRefund.shift(-18) + ",");
       console.log("JSONSUMMARY:       \"accountTotalEthAmount\": " + e.args.accountEthAmount.shift(-18) + ",");
