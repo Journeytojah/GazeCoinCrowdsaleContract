@@ -22,8 +22,19 @@ Status: Crowdsale contracts live. This page to be updated when I'm refreshed!
 
 * Crowdsale contract [0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b](https://etherscan.io/address/0xc2C7c5f64c2E3042852fb6Cbc3CAF9Ea1AfC018b)
 * BonusList [0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06](https://etherscan.io/address/0x46c54e170D4Ce2F194C9C2B3Cc767A90b831CC06)
-* Token contract [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/address/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
-* Token explorer [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/token/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+
+### Update Feb 25 2018
+
+There was a [bug](https://github.com/bokkypoobah/BokkyPooBahsTokenTeleportationServiceSmartContract#history) in the original GZE token contract below:
+
+* Token contract (old) [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/address/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+* Token explorer (old) [0x8C65e992297d5f092A756dEf24F4781a280198Ff](https://etherscan.io/token/0x8C65e992297d5f092A756dEf24F4781a280198Ff)
+
+A new token contract based on [BTTS v1.10](https://github.com/bokkypoobah/BokkyPooBahsTokenTeleportationServiceSmartContract/blob/ec58bced28ed996cb8cb36bc5783472017fb3689/contracts/BTTSTokenFactory.sol)
+was deployed on Feb 11 2018 with the balances from the old token contract transferred over, and this is now the GZE token contract:
+
+* Token contract (new) [0x4AC00f287f36A6Aad655281fE1cA6798C9cb727b](https://etherscan.io/address/0x4AC00f287f36A6Aad655281fE1cA6798C9cb727b)
+* Token explorer (new) [0x4AC00f287f36A6Aad655281fE1cA6798C9cb727b](https://etherscan.io/token/0x4AC00f287f36A6Aad655281fE1cA6798C9cb727b)
 
 <br />
 
